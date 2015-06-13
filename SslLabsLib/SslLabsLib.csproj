@@ -41,8 +41,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\CertificateIssues.cs" />
+    <Compile Include="Enums\RevocationInfo.cs" />
+    <Compile Include="Enums\RevocationStatus.cs" />
+    <Compile Include="Enums\ServerGatedCryptographySupport.cs" />
+    <Compile Include="Objects\Analysis.cs" />
+    <Compile Include="Enums\AnalyzeOptions.cs" />
+    <Compile Include="Objects\Cert.cs" />
+    <Compile Include="Enums\Delegation.cs" />
+    <Compile Include="Objects\Endpoin2t.cs" />
+    <Compile Include="Objects\Endpoint.cs" />
+    <Compile Include="Objects\Key.cs" />
+    <Compile Include="Objects\Info.cs" />
     <Compile Include="SslLabsClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Objects\StatusCodes.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

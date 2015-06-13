@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SslLabsLib.Objects;
 
 namespace SslLabsLib.Tests
 {
@@ -13,6 +14,19 @@ namespace SslLabsLib.Tests
 
             Info info = client.GetInfo();
             Assert.IsNotNull(info);
+        }
+    }
+
+    [TestClass]
+    public class StatusCodeTests
+    {
+        [TestMethod]
+        public void StatusCodeTest()
+        {
+            SslLabsClient client = new SslLabsClient();
+
+            StatusCodes codes = client.GetStatusCodes();
+            Assert.IsNotNull(codes);
         }
     }
 }

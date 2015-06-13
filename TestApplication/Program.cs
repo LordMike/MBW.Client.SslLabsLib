@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Net;
 using SslLabsLib;
 
 namespace TestApplication
@@ -12,7 +10,12 @@ namespace TestApplication
         {
             SslLabsClient client = new SslLabsClient();
 
-            client.GetInfo();
+            //Analysis res = client.GetAnalysis("csis.dk", null, AnalyzeOptions.FromCache | AnalyzeOptions.ReturnAllWhenDone);
+            var res = client.GetCachedEndpointAnalysis("csis.dk", IPAddress.Parse("46.51.179.119"));
+
+            var xa = res.Details.Cert;
+
+            Console.WriteLine(res);
         }
     }
 }
