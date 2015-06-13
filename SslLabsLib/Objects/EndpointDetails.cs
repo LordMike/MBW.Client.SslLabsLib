@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using RestSharp.Deserializers;
 using SslLabsLib.Enums;
@@ -12,6 +13,14 @@ namespace SslLabsLib.Objects
         /// Then, you should check that the hostStartTime value matches the startTime value of the host.
         /// </summary>
         public long HostStartTime { get; set; }
+
+        public DateTime HostStartTimeDateTime
+        {
+            get
+            {
+                return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(HostStartTime);
+            }
+        }
 
         /// <summary>
         /// Key information

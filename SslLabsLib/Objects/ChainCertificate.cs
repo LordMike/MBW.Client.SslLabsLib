@@ -1,3 +1,4 @@
+using System;
 using RestSharp.Deserializers;
 using SslLabsLib.Enums;
 
@@ -20,10 +21,26 @@ namespace SslLabsLib.Objects
         /// </summary>
         public long NotBefore { get; set; }
 
+        public DateTime NotBeforeDateTime
+        {
+            get
+            {
+                return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(NotBefore);
+            }
+        }
+
         /// <summary>
         /// Certificate end time
         /// </summary>
         public long NotAfter { get; set; }
+
+        public DateTime NotAfterDateTime
+        {
+            get
+            {
+                return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(NotAfter);
+            }
+        }
 
         /// <summary>
         /// Issuer subject
