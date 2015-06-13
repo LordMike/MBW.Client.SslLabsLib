@@ -70,6 +70,6 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Details for an Endpoint. It's not present by default, but can be enabled by using the AnalyzeOptions.ReturnAll paramerer to the analyze API call.
         /// </summary>
-        public Details Details { get; set; }
+        public EndpointDetails Details { get; set; }
     }
 }

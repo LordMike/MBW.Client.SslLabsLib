@@ -1,109 +1,9 @@
 using System.Collections.Generic;
-using SslLabsLib.Enums;
+using RestSharp.Deserializers;
 
 namespace SslLabsLib.Objects
 {
-    public class ChainCertificate
-    {
-        public string Subject { get; set; }
-
-        public string Label { get; set; }
-
-        public object NotBefore { get; set; }
-
-        public object NotAfter { get; set; }
-
-        public string IssuerSubject { get; set; }
-
-        public string IssuerLabel { get; set; }
-
-        public string SigAlg { get; set; }
-
-        public int Issues { get; set; }
-
-        public string KeyAlg { get; set; }
-
-        public int KeySize { get; set; }
-
-        public int KeyStrength { get; set; }
-
-        public int RevocationStatus { get; set; }
-
-        public int CrlRevocationStatus { get; set; }
-
-        public int OcspRevocationStatus { get; set; }
-
-        public string Raw { get; set; }
-    }
-
-    public class Chain
-    {
-        public List<ChainCertificate> Certs { get; set; }
-
-        public int Issues { get; set; }
-    }
-
-    public class Protocol
-    {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
-        public string Version { get; set; }
-    }
-
-    public class List
-    {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
-        public int CipherStrength { get; set; }
-
-        public int EcdhBits { get; set; }
-
-        public int EcdhStrength { get; set; }
-    }
-
-    public class Suites
-    {
-        public List<List> List { get; set; }
-
-        public bool Preference { get; set; }
-    }
-
-    public class Client
-    {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
-        public string Version { get; set; }
-
-        public bool IsReference { get; set; }
-
-        public string Platform { get; set; }
-    }
-
-    public class Result
-    {
-        public Client Client { get; set; }
-
-        public int ErrorCode { get; set; }
-
-        public int Attempts { get; set; }
-
-        public int ProtocolId { get; set; }
-
-        public int SuiteId { get; set; }
-    }
-
-    public class Sims
-    {
-        public List<Result> Results { get; set; }
-    }
-
-    public class Details
+    public class EndpointDetails
     {
         public long HostStartTime { get; set; }
 
@@ -155,7 +55,8 @@ namespace SslLabsLib.Objects
 
         public bool Rc4WithModern { get; set; }
 
-        public Sims Sims { get; set; }
+        [DeserializeAs(Name = "sims")]
+        public SimulationDetails Simulations { get; set; }
 
         public bool Heartbleed { get; set; }
 

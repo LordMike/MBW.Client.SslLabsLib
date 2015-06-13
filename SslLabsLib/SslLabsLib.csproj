@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\CertificateIssues.cs" />
+    <Compile Include="Enums\ChainCertificateIssues.cs" />
     <Compile Include="Enums\RevocationInfo.cs" />
     <Compile Include="Enums\RevocationStatus.cs" />
     <Compile Include="Enums\ServerGatedCryptographySupport.cs" />
@@ -49,7 +50,16 @@
     <Compile Include="Enums\AnalyzeOptions.cs" />
     <Compile Include="Objects\Cert.cs" />
     <Compile Include="Enums\Delegation.cs" />
-    <Compile Include="Objects\Endpoin2t.cs" />
+    <Compile Include="Enums\ChainIssues.cs" />
+    <Compile Include="Objects\Chain.cs" />
+    <Compile Include="Objects\ChainCertificate.cs" />
+    <Compile Include="Objects\Ciphersuite.cs" />
+    <Compile Include="Objects\Client.cs" />
+    <Compile Include="Objects\Protocol.cs" />
+    <Compile Include="Objects\Simulation.cs" />
+    <Compile Include="Objects\SimulationDetails.cs" />
+    <Compile Include="Objects\Suites.cs" />
+    <Compile Include="Objects\wip.cs" />
     <Compile Include="Objects\Endpoint.cs" />
     <Compile Include="Objects\Key.cs" />
     <Compile Include="Objects\Info.cs" />
