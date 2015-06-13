@@ -5,6 +5,8 @@ namespace SslLabsLib.Enums
     [Flags]
     public enum SctResult
     {
+        None = 0,
+
         /// <summary>
         /// SCT in certificate
         /// </summary>

@@ -5,6 +5,8 @@ namespace SslLabsLib.Enums
     [Flags]
     public enum ChainCertificateIssues
     {
+        None = 0,
+
         /// <summary>
         /// Certificate not yet valid
         /// </summary>

@@ -5,6 +5,8 @@ namespace SslLabsLib.Enums
     [Flags]
     public enum CertificateIssues
     {
+        None = 0,
+
         /// <summary>
         /// No chain of trust
         /// </summary>

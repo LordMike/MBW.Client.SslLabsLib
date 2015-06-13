@@ -5,6 +5,8 @@ namespace SslLabsLib.Enums
     [Flags]
     public enum ServerGatedCryptographySupport
     {
+        None = 0,
+
         /// <summary>
         /// Netscape SGC
         /// </summary>

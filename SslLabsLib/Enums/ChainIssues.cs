@@ -5,6 +5,8 @@ namespace SslLabsLib.Enums
     [Flags]
     public enum ChainIssues
     {
+        None = 0,
+
         /// <summary>
         /// Unused
         /// </summary>
