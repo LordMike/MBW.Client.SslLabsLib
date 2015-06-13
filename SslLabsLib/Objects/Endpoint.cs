@@ -1,3 +1,5 @@
+using SslLabsLib.Enums;
+
 namespace SslLabsLib.Objects
 {
     public class Endpoint
@@ -65,7 +67,7 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Indicates domain name delegation with and without the www prefix
         /// </summary>
-        public int Delegation { get; set; }
+        public Delegation Delegation { get; set; }
 
         /// <summary>
         /// Details for an Endpoint. It's not present by default, but can be enabled by using the AnalyzeOptions.ReturnAll paramerer to the analyze API call.

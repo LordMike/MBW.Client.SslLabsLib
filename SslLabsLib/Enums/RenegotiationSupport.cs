@@ -23,6 +23,12 @@ namespace SslLabsLib.Enums
         /// <summary>
         /// The server requires secure renegotiation support
         /// </summary>
-        ServerRequiresSecure = 8
+        ServerRequiresSecure = 8,
+
+        // TODO: Remove this when Restsharp handles Flags
+        Unused3 = 3,
+        Unused5 = 5,
+        Unused6 = 6,
+        Unused7 = 7,
     }
 }

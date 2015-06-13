@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using SslLabsLib.Enums;
 
 namespace SslLabsLib.Objects
 {
@@ -12,6 +13,6 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// The issues with this chain
         /// </summary>
-        public int Issues { get; set; }
+        public ChainIssues Issues { get; set; }
     }
 }

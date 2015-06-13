@@ -52,6 +52,7 @@
     <Compile Include="Enums\RevocationStatus.cs" />
     <Compile Include="Enums\SctResult.cs" />
     <Compile Include="Enums\ServerGatedCryptographySupport.cs" />
+    <Compile Include="Enums\SessionResumptionResult.cs" />
     <Compile Include="Enums\SessionTicketsResult.cs" />
     <Compile Include="Objects\Analysis.cs" />
     <Compile Include="Enums\AnalyzeOptions.cs" />

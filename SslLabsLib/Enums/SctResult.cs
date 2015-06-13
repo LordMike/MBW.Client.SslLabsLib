@@ -18,6 +18,9 @@ namespace SslLabsLib.Enums
         /// <summary>
         /// SCT in the TLS extension (ServerHello)
         /// </summary>
-        SctInTlsExtension = 4
+        SctInTlsExtension = 4,
+
+        // TODO: Remove this when Restsharp handles Flags
+        Unused3 = 3
     }
 }

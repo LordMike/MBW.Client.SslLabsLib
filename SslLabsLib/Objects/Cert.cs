@@ -82,7 +82,7 @@ namespace SslLabsLib.Objects
         /// Server Gated Cryptography support; integer:
         /// </summary>
         [DeserializeAs(Name = "sgc")]
-        public int ServerGatedCryptography { get; set; }
+        public ServerGatedCryptographySupport ServerGatedCryptography { get; set; }
 
         /// <summary>
         /// E for Extended Validation certificates; may be null if unable to determine
@@ -92,7 +92,7 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// List of certificate issues, one bit per issue:
         /// </summary>
-        public int Issues { get; set; }
+        public CertificateIssues Issues { get; set; }
 
         /// <summary>
         /// True if the certificate contains an embedded SCT; false otherwise.

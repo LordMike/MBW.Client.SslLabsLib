@@ -64,7 +64,7 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// This is an integer value that describes the endpoint support for renegotiation:
         /// </summary>
-        public int RenegSupport { get; set; }
+        public RenegotiationSupport RenegSupport { get; set; }
 
         /// <summary>
         /// The contents of the Strict-Transport-Security (STS) response header, if seen
@@ -93,12 +93,12 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// This is an integer value that describes endpoint support for session resumption.
         /// </summary>
-        public int SessionResumption { get; set; }
+        public SessionResumptionResult SessionResumption { get; set; }
 
         /// <summary>
         /// Integer value that describes supported compression methods
         /// </summary>
-        public int CompressionMethods { get; set; }
+        public CompressionMethodsSupported CompressionMethods { get; set; }
 
         /// <summary>
         /// True if the server supports NPN
@@ -113,7 +113,7 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Indicates support for Session Tickets
         /// </summary>
-        public int SessionTickets { get; set; }
+        public SessionTicketsResult SessionTickets { get; set; }
 
         /// <summary>
         /// True if OCSP stapling is deployed on the server
@@ -154,7 +154,7 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Indicates support for Forward Secrecy
         /// </summary>
-        public int ForwardSecrecy { get; set; }
+        public ForwardSecrecyResult ForwardSecrecy { get; set; }
 
         /// <summary>
         /// True if RC4 is used with modern clients.
@@ -207,6 +207,6 @@ namespace SslLabsLib.Objects
         /// Information about the availability of certificate transparency information (embedded SCTs):
         /// </summary>
         [DeserializeAs(Name = "hasSct")]
-        public int HasSct { get; set; }
+        public SctResult HasSct { get; set; }
     }
 }

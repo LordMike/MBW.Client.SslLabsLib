@@ -44,7 +44,7 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Issues with this certificate
         /// </summary>
-        public int Issues { get; set; }
+        public ChainCertificateIssues Issues { get; set; }
 
         /// <summary>
         /// Key algorithm

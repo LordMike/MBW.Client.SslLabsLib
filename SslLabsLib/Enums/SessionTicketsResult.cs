@@ -18,6 +18,9 @@ namespace SslLabsLib.Enums
         /// <summary>
         /// The server is intolerant to the extension
         /// </summary>
-        IntolerantServer = 4
+        IntolerantServer = 4,
+
+        // TODO: Remove this when Restsharp handles Flags
+        Unused3 = 3
     }
 }

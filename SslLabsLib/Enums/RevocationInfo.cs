@@ -13,6 +13,6 @@ namespace SslLabsLib.Enums
         /// <summary>
         /// OCSP information available
         /// </summary>
-        OCSPAvailable =2
+        OCSPAvailable = 2
     }
 }

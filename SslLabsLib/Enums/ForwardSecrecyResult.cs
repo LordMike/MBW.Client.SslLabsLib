@@ -18,6 +18,9 @@ namespace SslLabsLib.Enums
         /// <summary>
         /// All simulated clients achieve FS. In other words, this requires an ECDHE + DHE combination to be supported.
         /// </summary>
-        AllSimulatedClients = 4
+        AllSimulatedClients = 4,
+
+        // TODO: Remove this when Restsharp handles Flags
+        Unused3 = 3,
     }
 }
