@@ -1,6 +1,6 @@
 using System;
 
-namespace SslLabsLib.Objects
+namespace SslLabsLib.Enums
 {
     [Flags]
     public enum ChainIssues

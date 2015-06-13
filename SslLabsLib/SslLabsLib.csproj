@@ -43,9 +43,16 @@
   <ItemGroup>
     <Compile Include="Enums\CertificateIssues.cs" />
     <Compile Include="Enums\ChainCertificateIssues.cs" />
+    <Compile Include="Enums\CompressionMethodsSupported.cs" />
+    <Compile Include="Enums\ForwardSecrecyResult.cs" />
+    <Compile Include="Enums\OpenSslCcsResult.cs" />
+    <Compile Include="Enums\PoodleResult.cs" />
+    <Compile Include="Enums\RenegotiationSupport.cs" />
     <Compile Include="Enums\RevocationInfo.cs" />
     <Compile Include="Enums\RevocationStatus.cs" />
+    <Compile Include="Enums\SctResult.cs" />
     <Compile Include="Enums\ServerGatedCryptographySupport.cs" />
+    <Compile Include="Enums\SessionTicketsResult.cs" />
     <Compile Include="Objects\Analysis.cs" />
     <Compile Include="Enums\AnalyzeOptions.cs" />
     <Compile Include="Objects\Cert.cs" />
@@ -59,7 +66,7 @@
     <Compile Include="Objects\Simulation.cs" />
     <Compile Include="Objects\SimulationDetails.cs" />
     <Compile Include="Objects\Suites.cs" />
-    <Compile Include="Objects\wip.cs" />
+    <Compile Include="Objects\EndpointDetails.cs" />
     <Compile Include="Objects\Endpoint.cs" />
     <Compile Include="Objects\Key.cs" />
     <Compile Include="Objects\Info.cs" />
