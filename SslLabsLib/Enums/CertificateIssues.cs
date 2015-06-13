@@ -297,6 +297,6 @@ namespace SslLabsLib.Enums
         Unused252 = 252,
         Unused253 = 253,
         Unused254 = 254,
-        Unused255 = 255,
+        Unused255 = 255
     }
 }
