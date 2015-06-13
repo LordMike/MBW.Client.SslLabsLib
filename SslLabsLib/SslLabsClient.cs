@@ -11,8 +11,8 @@ namespace SslLabsLib
 {
     public class SslLabsClient
     {
-        private static TimeSpan _waitTimePreScan = TimeSpan.FromSeconds(5);
-        private static TimeSpan _waitTimeScan = TimeSpan.FromSeconds(10);
+        private static TimeSpan _waitTimePreScan = TimeSpan.FromSeconds(10);
+        private static TimeSpan _waitTimeScan = TimeSpan.FromSeconds(5);
         private static TimeSpan _waitTimeOverloaded = TimeSpan.FromSeconds(30);
 
         private RestClient _restClient;
@@ -109,6 +109,9 @@ namespace SslLabsLib
                 case AnalysisResult.Maintenance:
                     throw new Exception("The server was unable to handle the request due to Maintenance (HTTP 503)");
             }
+
+            if (progressCallback != null)
+                progressCallback(analysis);
 
             // Deactivate StartNew
             options &= ~AnalyzeOptions.StartNew;

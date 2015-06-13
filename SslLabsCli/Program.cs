@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mono.Options;
+using SslLabsCli.Utilities;
 using SslLabsLib;
 using SslLabsLib.Enums;
 using SslLabsLib.Objects;
@@ -10,10 +11,12 @@ namespace SslLabsCli
 {
     class Program
     {
-        static void Main(string[] args)
+        private static SslLabsClient _client = new SslLabsClient();
+
+        static int Main(string[] args)
         {
             // SslLabsCli csis.dk --progress --new --nowait
-            
+
             Options options = new Options();
 
             OptionSet parser = new OptionSet();
@@ -33,25 +36,88 @@ namespace SslLabsCli
                 parser.WriteOptionDescriptions(Console.Out);
                 Console.WriteLine();
 
-                return;
+                return 1;
             }
 
             Analysis analysis = HandleFetch(options);
 
+            if (analysis.Status == "ERROR")
+            {
+                AwesomeConsole.WriteLine("An error occurred", ConsoleColor.Red);
+                AwesomeConsole.Write("Status: ");
+                AwesomeConsole.WriteLine(analysis.StatusMessage, ConsoleColor.Cyan);
+
+                AwesomeConsole.WriteLine("Messages from SSLLabs");
+                Info info = _client.GetInfo();
+
+                foreach (string msg in info.Messages)
+                    AwesomeConsole.WriteLine("  " + msg, ConsoleColor.Yellow);
+
+                return 3;
+            }
+
             if (analysis.Status != "READY")
             {
-                Console.WriteLine("Analysis not available");
-                return;
+                AwesomeConsole.WriteLine("Analysis not available", ConsoleColor.DarkYellow);
+                return 2;
             }
 
             PresentAnalysis(analysis);
+
+            return 0;
         }
 
         private static Analysis HandleFetch(Options options)
         {
-            SslLabsClient client = new SslLabsClient();
+            Action<Analysis> progress = prg =>
+            {
+                if (prg.Endpoints == null)
+                {
+                    using (AwesomeConsole.BeginSequentialWrite())
+                        AwesomeConsole.WriteLine("Progress {0}", prg.Status);
 
-            Analysis analysis = client.GetAnalysisBlocking(options.Hostname, null, AnalyzeOptions.FromCache | AnalyzeOptions.ReturnAllWhenDone);
+                    return;
+                }
+
+                float max = prg.Endpoints.Count * 100;
+                float pct = prg.Endpoints.Sum(s => (float)(s.Progress == -1 ? 0 : s.Progress)) / max;
+
+                string current = prg.Endpoints.SkipWhile(s => s.Progress == 100).Select(s => s.StatusDetailsMessage).FirstOrDefault();
+                List<Tuple<int, string>> states = prg.Endpoints.Select(s => new Tuple<int, string>(s.Progress, s.StatusMessage)).ToList();
+
+                using (AwesomeConsole.BeginSequentialWrite())
+                {
+                    AwesomeConsole.Write("Progress {0:P}", pct);
+                    AwesomeConsole.Write(" (servers: ");
+                    for (int i = 0; i < states.Count; i++)
+                    {
+                        Tuple<int, string> state = states[i];
+
+                        if (state.Item1 == 100)
+                            AwesomeConsole.Write("{0}", ConsoleColor.DarkGreen, state.Item2);
+                        else
+                            AwesomeConsole.Write("{0}", ConsoleColor.Yellow, state.Item2);
+
+                        if (i > 0)
+                            AwesomeConsole.Write(" | ");
+                    }
+                    AwesomeConsole.Write(") (current: ");
+                    AwesomeConsole.Write("{0}", ConsoleColor.Cyan, current);
+                    AwesomeConsole.WriteLine(")");
+                }
+            };
+
+            if (!options.Progress)
+                progress = null;
+
+            AnalyzeOptions analyzeOptions = AnalyzeOptions.ReturnAllWhenDone;
+
+            if (options.New)
+                analyzeOptions |= AnalyzeOptions.StartNew;
+            else
+                analyzeOptions |= AnalyzeOptions.FromCache;
+
+            Analysis analysis = _client.GetAnalysisBlocking(options.Hostname, null, analyzeOptions, progress);
 
             return analysis;
         }
@@ -84,7 +150,7 @@ namespace SslLabsCli
         }
     }
 
-    internal class Options 
+    internal class Options
     {
         public bool Progress { get; set; }
 
