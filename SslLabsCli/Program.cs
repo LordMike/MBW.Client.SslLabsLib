@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using CommandLine;
-using CommandLine.Text;
+using Mono.Options;
 using SslLabsLib;
 using SslLabsLib.Enums;
 using SslLabsLib.Objects;
@@ -13,10 +13,26 @@ namespace SslLabsCli
         static void Main(string[] args)
         {
             // SslLabsCli csis.dk --progress --new --nowait
-
+            
             Options options = new Options();
-            if (!Parser.Default.ParseArguments(args, options))
+
+            OptionSet parser = new OptionSet();
+            parser.Add("p|progress", "Show progress while waiting", s => options.Progress = true);
+            parser.Add("n|new", "Force a new scan", s => options.New = true);
+            parser.Add("w|nowait", "Exit if no scan is available", s => options.NoWait = true);
+
+            List<string> leftoverArgs = parser.Parse(args);
+            options.Hostname = leftoverArgs.FirstOrDefault();
+
+            if (string.IsNullOrEmpty(options.Hostname))
             {
+                Console.WriteLine("Usage: ");
+                Console.WriteLine("  SslLabsCli [options] ssllabs.com");
+                Console.WriteLine();
+                Console.WriteLine("Options");
+                parser.WriteOptionDescriptions(Console.Out);
+                Console.WriteLine();
+
                 return;
             }
 
@@ -68,26 +84,14 @@ namespace SslLabsCli
         }
     }
 
-    internal class Options
+    internal class Options 
     {
-        [Option('p', "progress", HelpText = "Show progress while waiting.")]
         public bool Progress { get; set; }
 
-        [Option('n', "new", HelpText = "Force a new scan.")]
         public bool New { get; set; }
 
-        [Option('w', "nowait", HelpText = "Exit if no scan is available.")]
         public bool NoWait { get; set; }
 
-        [ValueOption(0)]
         public string Hostname { get; set; }
-
-        [HelpOption]
-        public string GetUsage()
-        {
-            HelpText autoBuild = HelpText.AutoBuild(this);
-
-            return autoBuild;
-        }
     }
 }
