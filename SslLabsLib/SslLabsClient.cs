@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using RestSharp;
 using RestSharp.Extensions;
@@ -10,6 +11,10 @@ namespace SslLabsLib
 {
     public class SslLabsClient
     {
+        private static TimeSpan _waitTimePreScan = TimeSpan.FromSeconds(5);
+        private static TimeSpan _waitTimeScan = TimeSpan.FromSeconds(10);
+        private static TimeSpan _waitTimeOverloaded = TimeSpan.FromSeconds(30);
+
         private RestClient _restClient;
 
         public int MaxAssesments { get; private set; }
@@ -84,6 +89,78 @@ namespace SslLabsLib
             ReadXHeaders(resp);
 
             return resp.Data;
+        }
+
+        public Analysis GetAnalysisBlocking(string hostname, int? maxAge = null, AnalyzeOptions options = AnalyzeOptions.None, Action<Analysis> progressCallback = null)
+        {
+            // Deactivate ReturnAll, activate ReturnAllWhenDone
+            options &= ~AnalyzeOptions.ReturnAll;
+            options |= AnalyzeOptions.ReturnAllWhenDone;
+
+            // Initial request
+            Analysis analysis;
+            AnalysisResult result = GetAnalysisInternal(hostname, maxAge, options, out analysis);
+
+            switch (result)
+            {
+                case AnalysisResult.Error:
+                case AnalysisResult.UnknownError:
+                    throw new Exception("The server was unable to handle the request (" + result + ")");
+                case AnalysisResult.Maintenance:
+                    throw new Exception("The server was unable to handle the request due to Maintenance (HTTP 503)");
+            }
+
+            // Deactivate StartNew
+            options &= ~AnalyzeOptions.StartNew;
+
+            // Loop till we're done
+            TimeSpan toWait = _waitTimePreScan;
+
+            while (true)
+            {
+                Thread.Sleep(toWait);
+
+                // Perform next analysis
+                result = GetAnalysisInternal(hostname, maxAge, options, out analysis);
+
+                if (result == AnalysisResult.Error || result == AnalysisResult.UnknownError)
+                    throw new Exception("The server was unable to handle the request (" + result + ")");
+
+                if (result == AnalysisResult.Maintenance)
+                    throw new Exception("The server was unable to handle the request due to Maintenance (HTTP 503)");
+
+                if (result == AnalysisResult.RateLimit || result == AnalysisResult.Overloaded)
+                {
+                    toWait = _waitTimeOverloaded;
+                }
+                else if (result == AnalysisResult.Success)
+                {
+                    toWait = _waitTimePreScan;
+
+                    // Success
+                    // States: DNS, ERROR, IN_PROGRESS, and READY.
+                    if (analysis.Status == "DNS" || analysis.Status == "IN_PROGRESS")
+                    {
+                        // Underways
+                        toWait = _waitTimeScan;
+                    }
+                    else if (analysis.Status == "READY" || analysis.Status == "ERROR")
+                    {
+                        // We're done
+                        break;
+                    }
+                    else
+                        throw new InvalidOperationException("Unknown response...");
+                }
+                else
+                    // Unknown?
+                    throw new InvalidOperationException("Unknown state...");
+
+                if (progressCallback != null)
+                    progressCallback(analysis);
+            }
+
+            return analysis;
         }
 
         private void ReadXHeaders<T>(IRestResponse<T> resp)
