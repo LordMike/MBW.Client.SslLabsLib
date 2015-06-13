@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SslLabsLib.Tests", "SslLabs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApplication", "TestApplication\TestApplication.csproj", "{690A154F-ED3E-40B8-B6D9-834C52449D28}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{8F7C37A6-2C78-4230-8E0A-A0C36603544E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SslLabsCli", "SslLabsCli\SslLabsCli.csproj", "{28673BC2-83A2-4EDA-B771-403076B2CFE1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,8 +31,16 @@ Global
 		{690A154F-ED3E-40B8-B6D9-834C52449D28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{690A154F-ED3E-40B8-B6D9-834C52449D28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{690A154F-ED3E-40B8-B6D9-834C52449D28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28673BC2-83A2-4EDA-B771-403076B2CFE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28673BC2-83A2-4EDA-B771-403076B2CFE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28673BC2-83A2-4EDA-B771-403076B2CFE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28673BC2-83A2-4EDA-B771-403076B2CFE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{226A0EE2-3AA3-4B0C-876C-3581239927E3} = {8F7C37A6-2C78-4230-8E0A-A0C36603544E}
+		{C4762041-ECD9-4436-B995-EC600C10DDE5} = {8F7C37A6-2C78-4230-8E0A-A0C36603544E}
 	EndGlobalSection
 EndGlobal
