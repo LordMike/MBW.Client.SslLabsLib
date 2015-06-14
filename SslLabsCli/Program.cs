@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Mono.Options;
+using Newtonsoft.Json;
 using SslLabsCli.Utilities;
 using SslLabsLib;
 using SslLabsLib.Enums;
@@ -23,6 +25,7 @@ namespace SslLabsCli
             parser.Add("p|progress", "Show progress while waiting", s => options.Progress = true);
             parser.Add("n|new", "Force a new scan", s => options.New = true);
             parser.Add("w|nowait", "Exit if no scan is available", s => options.NoWait = true);
+            parser.Add("s|save", "Save the scan to a file", s => options.Save = s);
 
             List<string> leftoverArgs = parser.Parse(args);
             options.Hostname = leftoverArgs.FirstOrDefault();
@@ -63,6 +66,11 @@ namespace SslLabsCli
             }
 
             PresentAnalysis(analysis);
+
+            if (!string.IsNullOrEmpty(options.Save))
+            {
+                File.WriteAllText(options.Save, JsonConvert.SerializeObject(analysis, Formatting.Indented));
+            }
 
             return 0;
         }
@@ -127,8 +135,23 @@ namespace SslLabsCli
             Console.WriteLine("== Basic ==");
             Console.WriteLine("Host: " + analysis.Host + ":" + analysis.Port);
             Console.WriteLine("Public: " + analysis.IsPublic);
-
             Console.WriteLine();
+
+            for (int i = 0; i < analysis.Endpoints.Count; i++)
+            {
+                Key key = analysis.Endpoints[i].Details.Key;
+                Cert cert = analysis.Endpoints[i].Details.Cert;
+
+                Console.WriteLine("== Certificate [" + i + "] ==");
+                Console.WriteLine("CN: " + string.Join(", ", cert.CommonNames));
+                Console.WriteLine("Issuer: " + cert.IssuerLabel);
+                Console.WriteLine("Validity: " + cert.NotBeforeDateTime.ToUniversalTime().ToString("g") + " -> " + cert.NotAfterDateTime.ToUniversalTime().ToString("g") + " UTC");
+                Console.WriteLine("Signature: " + cert.SigAlg);
+                Console.WriteLine("Key: " + key.Alg + " " + key.Size);
+                Console.WriteLine();
+            }
+
+
             Console.WriteLine("== Endpoints ==");
 
             for (int i = 0; i < analysis.Endpoints.Count; i++)
@@ -159,5 +182,7 @@ namespace SslLabsCli
         public bool NoWait { get; set; }
 
         public string Hostname { get; set; }
+
+        public string Save { get; set; }
     }
 }

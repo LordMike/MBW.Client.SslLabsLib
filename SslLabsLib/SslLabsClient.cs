@@ -110,6 +110,9 @@ namespace SslLabsLib
                     throw new Exception("The server was unable to handle the request due to Maintenance (HTTP 503)");
             }
 
+            if (analysis.Status == "READY")
+                return analysis;
+
             if (progressCallback != null)
                 progressCallback(analysis);
 
