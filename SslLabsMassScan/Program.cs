@@ -90,13 +90,10 @@ namespace SslLabsMassScan
             if (options.Publish)
                 startOptions |= AnalyzeOptions.Publish;
 
-            Timer timer = new Timer(2000);
-            timer.Elapsed += (sender, eventArgs) =>
-                Console.WriteLine("Queue: " + domains.Count +
-                                    ", running: " + runningTasks +
-                                    " (of " + client.MaxAssesments + "), " +
-                                    "completed: " + completedTasks);
-            timer.Start();
+            Action printStatus = () => Console.WriteLine("Queue: " + domains.Count +
+                                                         ", running: " + runningTasks +
+                                                         " (of " + client.MaxAssesments + "), " +
+                                                         "completed: " + completedTasks);
 
             AutoResetEvent limitChangedEvent = new AutoResetEvent(false);
 
@@ -116,11 +113,16 @@ namespace SslLabsMassScan
                         bool didStart = client.TryStartAnalysis(domain, out analysis, startOptions);
 
                         if (didStart)
+                        {
+                            printStatus();
                             break;
+                        }
                     }
 
                     // Wait for one to free up, fall back to trying every 30s
                     limitChangedEvent.WaitOne(30000);
+
+                    printStatus();
                 }
 
                 // The task was started
@@ -149,6 +151,10 @@ namespace SslLabsMassScan
 
                 Interlocked.Increment(ref runningTasks);
             }
+
+            Timer timer = new Timer(2000);
+            timer.Elapsed += (sender, eventArgs) => printStatus();
+            timer.Start();
 
             while (runningTasks != 0)
             {
