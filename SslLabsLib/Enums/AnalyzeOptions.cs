@@ -43,7 +43,7 @@ namespace SslLabsLib.Enums
         /// <summary>
         /// Fetches all information available only when the assesment is done.
         /// </summary>
-        ReturnAllWhenDone = 16,
+        ReturnAllIfDone = 16,
 
         /// <summary>
         /// Proceed with the assesment even if the site presents a certificate which doesn't match its name.

@@ -118,7 +118,7 @@ namespace SslLabsCli
             if (!options.Progress)
                 progress = null;
 
-            AnalyzeOptions analyzeOptions = AnalyzeOptions.ReturnAllWhenDone;
+            AnalyzeOptions analyzeOptions = AnalyzeOptions.ReturnAllIfDone;
 
             if (options.New)
                 analyzeOptions |= AnalyzeOptions.StartNew;

@@ -92,7 +92,7 @@ namespace SslLabsLib
         {
             // Deactivate ReturnAll, activate ReturnAllWhenDone
             options &= ~AnalyzeOptions.ReturnAll;
-            options |= AnalyzeOptions.ReturnAllWhenDone;
+            options |= AnalyzeOptions.ReturnAllIfDone;
 
             // Initial request
             Analysis analysis;
@@ -217,7 +217,7 @@ namespace SslLabsLib
 
             if (options.HasFlag(AnalyzeOptions.ReturnAll))
                 parms["all"] = "on";
-            else if (options.HasFlag(AnalyzeOptions.ReturnAllWhenDone))
+            else if (options.HasFlag(AnalyzeOptions.ReturnAllIfDone))
                 parms["all"] = "done";
 
             if (options.HasFlag(AnalyzeOptions.IgnoreMismatch))
