@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading;
-using System.Threading.Tasks;
 using RestSharp;
-using RestSharp.Extensions;
 using SslLabsLib.Enums;
 using SslLabsLib.Objects;
 
@@ -32,7 +30,6 @@ namespace SslLabsLib
                 throw new ArgumentNullException("baseUrl");
 
             _restClient = new RestClient(baseUrl);
-
         }
 
         public Info GetInfo()
