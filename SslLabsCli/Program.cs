@@ -17,7 +17,7 @@ namespace SslLabsCli
 
         static int Main(string[] args)
         {
-            // SslLabsCli csis.dk --progress --new --nowait
+            // SslLabsCli ssllabs.com --progress --new --nowait
 
             Options options = new Options();
 
@@ -145,7 +145,7 @@ namespace SslLabsCli
                 Console.WriteLine("== Certificate [" + i + "] ==");
                 Console.WriteLine("CN: " + string.Join(", ", cert.CommonNames));
                 Console.WriteLine("Issuer: " + cert.IssuerLabel);
-                Console.WriteLine("Validity: " + cert.NotBeforeDateTime.ToUniversalTime().ToString("g") + " -> " + cert.NotAfterDateTime.ToUniversalTime().ToString("g") + " UTC");
+                Console.WriteLine("Validity: " + cert.NotBefore.ToUniversalTime().ToString("g") + " -> " + cert.NotAfter.ToUniversalTime().ToString("g") + " UTC");
                 Console.WriteLine("Signature: " + cert.SigAlg);
                 Console.WriteLine("Key: " + key.Alg + " " + key.Size);
                 Console.WriteLine();

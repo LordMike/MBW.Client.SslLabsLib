@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using SslLabsLib.Code;
 using SslLabsLib.Enums;
 
 namespace SslLabsLib.Objects
@@ -24,28 +26,14 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Timestamp before which the certificate is not valid
         /// </summary>
-        public long NotBefore { get; set; }
-
-        public DateTime NotBeforeDateTime
-        {
-            get
-            {
-                return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(NotBefore);
-            }
-        }
+        [JsonConverter(typeof(MillisecondEpochConverter))]
+        public DateTime NotBefore { get; set; }
 
         /// <summary>
         /// Timestamp after which the certificate is not valid
         /// </summary>
-        public long NotAfter { get; set; }
-
-        public DateTime NotAfterDateTime
-        {
-            get
-            {
-                return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(NotAfter);
-            }
-        }
+        [JsonConverter(typeof(MillisecondEpochConverter))]
+        public DateTime NotAfter { get; set; }
 
         /// <summary>
         /// Issuer subject

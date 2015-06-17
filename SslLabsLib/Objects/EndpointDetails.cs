@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using SslLabsLib.Code;
 using SslLabsLib.Enums;
 
 namespace SslLabsLib.Objects
@@ -12,15 +13,8 @@ namespace SslLabsLib.Objects
         /// This field is useful when test results are retrieved in several HTTP invocations. 
         /// Then, you should check that the hostStartTime value matches the startTime value of the host.
         /// </summary>
-        public long HostStartTime { get; set; }
-
-        public DateTime HostStartTimeDateTime
-        {
-            get
-            {
-                return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(HostStartTime);
-            }
-        }
+        [JsonConverter(typeof(MillisecondEpochConverter))]
+        public DateTime HostStartTime { get; set; }
 
         /// <summary>
         /// Key information

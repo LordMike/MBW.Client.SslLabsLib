@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using SslLabsLib.Code;
 
 namespace SslLabsLib.Objects
 {
@@ -38,28 +40,14 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Assessment starting time, in milliseconds since 1970
         /// </summary>
-        public long StartTime { get; set; }
-
-        public DateTime StartTimeDateTime
-        {
-            get
-            {
-                return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(StartTime);
-            }
-        }
+        [JsonConverter(typeof(MillisecondEpochConverter))]
+        public DateTime StartTime { get; set; }
 
         /// <summary>
         /// Assessment completion time, in milliseconds since 1970
         /// </summary>
-        public long TestTime { get; set; }
-
-        public DateTime TestTimeDateTime
-        {
-            get
-            {
-                return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(TestTime);
-            }
-        }
+        [JsonConverter(typeof(MillisecondEpochConverter))]
+        public DateTime TestTime { get; set; }
 
         /// <summary>
         /// Assessment engine version (e.g., "1.0.120")

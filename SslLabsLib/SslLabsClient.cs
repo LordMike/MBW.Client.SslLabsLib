@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using SslLabsLib.Enums;
 using SslLabsLib.Objects;
 
@@ -174,7 +175,9 @@ namespace SslLabsLib
             bool first = true;
             foreach (KeyValuePair<string, string> pair in parms)
             {
-                if (!first)
+                if (first)
+                    sb.Append("?");
+                else
                     sb.Append("&");
 
                 sb.Append(pair.Key);
@@ -219,6 +222,9 @@ namespace SslLabsLib
 
             if (options.HasFlag(AnalyzeOptions.IgnoreMismatch))
                 parms["ignoreMismatch"] = "on";
+
+            if (maxAge.HasValue)
+                parms["maxAge"] = maxAge.ToString();
 
             HttpResponseMessage resp = _restClient.GetAsync(BuildUrl("analyze", parms)).Result;
 
