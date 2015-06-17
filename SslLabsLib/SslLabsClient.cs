@@ -107,7 +107,7 @@ namespace SslLabsLib
                     throw new Exception("The server was unable to handle the request due to Maintenance (HTTP 503)");
             }
 
-            if (analysis.Status == "READY")
+            if (analysis.Status == AnalysisStatus.READY)
                 return analysis;
 
             if (progressCallback != null)
@@ -142,12 +142,12 @@ namespace SslLabsLib
 
                     // Success
                     // States: DNS, ERROR, IN_PROGRESS, and READY.
-                    if (analysis.Status == "DNS" || analysis.Status == "IN_PROGRESS")
+                    if (analysis.Status == AnalysisStatus.DNS || analysis.Status == AnalysisStatus.IN_PROGRESS)
                     {
                         // Underways
                         toWait = _waitTimeScan;
                     }
-                    else if (analysis.Status == "READY" || analysis.Status == "ERROR")
+                    else if (analysis.Status == AnalysisStatus.READY || analysis.Status == AnalysisStatus.ERROR)
                     {
                         // We're done
                         break;

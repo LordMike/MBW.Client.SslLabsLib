@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using SslLabsLib.Code;
+using SslLabsLib.Enums;
 
 namespace SslLabsLib.Objects
 {
@@ -30,7 +32,8 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Assessment status; possible values: DNS, ERROR, IN_PROGRESS, and READY.
         /// </summary>
-        public string Status { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public AnalysisStatus Status { get; set; }
 
         /// <summary>
         /// Status message in English. When status is ERROR, this field will contain an error message.

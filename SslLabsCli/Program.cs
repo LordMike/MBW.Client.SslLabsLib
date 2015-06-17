@@ -44,7 +44,7 @@ namespace SslLabsCli
 
             Analysis analysis = HandleFetch(options);
 
-            if (analysis.Status == "ERROR")
+            if (analysis.Status == AnalysisStatus.ERROR)
             {
                 AwesomeConsole.WriteLine("An error occurred", ConsoleColor.Red);
                 AwesomeConsole.Write("Status: ");
@@ -59,7 +59,7 @@ namespace SslLabsCli
                 return 3;
             }
 
-            if (analysis.Status != "READY")
+            if (analysis.Status != AnalysisStatus.READY)
             {
                 AwesomeConsole.WriteLine("Analysis not available", ConsoleColor.DarkYellow);
                 return 2;

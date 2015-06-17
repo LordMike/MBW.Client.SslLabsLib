@@ -2,6 +2,14 @@
 
 namespace SslLabsLib.Enums
 {
+    public enum AnalysisStatus
+    {
+        DNS,
+        ERROR,
+        IN_PROGRESS,
+        READY
+    }
+
     [Flags]
     public enum AnalyzeOptions
     {
