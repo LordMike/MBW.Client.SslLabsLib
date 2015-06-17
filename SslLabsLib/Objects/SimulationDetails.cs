@@ -8,7 +8,7 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Simulations
         /// </summary>
-        [JsonProperty("Results")]
+        [JsonProperty("results")]
         public List<Simulation> Simulations { get; set; }
     }
 }

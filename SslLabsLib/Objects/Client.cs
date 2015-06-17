@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace SslLabsLib.Objects
 {
     public class Client
@@ -5,16 +7,19 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Unique client ID
         /// </summary>
+        [JsonProperty("id")]
         public int Id { get; set; }
 
         /// <summary>
         /// Name
         /// </summary> 
+        [JsonProperty("name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Version
         /// </summary>
+        [JsonProperty("version")]
         public string Version { get; set; }
 
         /// <summary>
@@ -23,11 +28,13 @@ namespace SslLabsLib.Objects
         /// For example, to track Forward Secrecy support, we mark several representative browsers as "modern" and then test to see if they succeed in negotiating a FS suite. 
         /// Just as an illustration, modern browsers are currently Chrome, Firefox (not ESR versions), IE/Win7, and Safari.
         /// </summary>
+        [JsonProperty("isReference")]
         public bool IsReference { get; set; }
 
         /// <summary>
         /// Platform
         /// </summary>
+        [JsonProperty("platform")]
         public string Platform { get; set; }
     }
 }

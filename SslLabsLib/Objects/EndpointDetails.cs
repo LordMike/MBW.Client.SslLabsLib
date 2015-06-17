@@ -14,31 +14,37 @@ namespace SslLabsLib.Objects
         /// Then, you should check that the hostStartTime value matches the startTime value of the host.
         /// </summary>
         [JsonConverter(typeof(MillisecondEpochConverter))]
+        [JsonProperty("hostStartTime")]
         public DateTime HostStartTime { get; set; }
 
         /// <summary>
         /// Key information
         /// </summary>
+        [JsonProperty("key")]
         public Key Key { get; set; }
 
         /// <summary>
         /// Certificate information
         /// </summary>
+        [JsonProperty("cert")]
         public Cert Cert { get; set; }
 
         /// <summary>
         /// Chain information
         /// </summary>
+        [JsonProperty("chain")]
         public Chain Chain { get; set; }
 
         /// <summary>
         /// Supported protocols
         /// </summary>
+        [JsonProperty("protocols")]
         public List<Protocol> Protocols { get; set; }
 
         /// <summary>
         /// Supported cipher suites
         /// </summary>
+        [JsonProperty("suites")]
         public Suites Suites { get; set; }
 
         /// <summary>
@@ -47,26 +53,31 @@ namespace SslLabsLib.Objects
         /// 1) the HTTP request failed (check httpStatusCode)
         /// 2) there was no Server response header returned.
         /// </summary>
+        [JsonProperty("serverSignature")]
         public string ServerSignature { get; set; }
 
         /// <summary>
         /// True if this endpoint is reachable via a hostname with the www prefix
         /// </summary>
+        [JsonProperty("prefixDelegation")]
         public bool PrefixDelegation { get; set; }
 
         /// <summary>
         /// True if this endpoint is reachable via a hostname without the www prefix
         /// </summary>
+        [JsonProperty("nonPrefixDelegation")]
         public bool NonPrefixDelegation { get; set; }
 
         /// <summary>
         /// True if the endpoint is vulnerable to the BEAST attack
         /// </summary>
+        [JsonProperty("vulnBeast")]
         public bool VulnBeast { get; set; }
 
         /// <summary>
         /// This is an integer value that describes the endpoint support for renegotiation:
         /// </summary>
+        [JsonProperty("renegSupport")]
         public RenegotiationSupport RenegSupport { get; set; }
 
         /// <summary>
@@ -96,72 +107,86 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// This is an integer value that describes endpoint support for session resumption.
         /// </summary>
+        [JsonProperty("sessionResumption")]
         public SessionResumptionResult SessionResumption { get; set; }
 
         /// <summary>
         /// Integer value that describes supported compression methods
         /// </summary>
+        [JsonProperty("compressionMethods")]
         public CompressionMethodsSupported CompressionMethods { get; set; }
 
         /// <summary>
         /// True if the server supports NPN
         /// </summary>
+        [JsonProperty("supportsNpn")]
         public bool SupportsNpn { get; set; }
 
         /// <summary>
         /// List of supported protocols, separated by spaces
         /// </summary>
+        [JsonProperty("npnProtocols")]
         public string NpnProtocols { get; set; }
 
         /// <summary>
         /// Indicates support for Session Tickets
         /// </summary>
+        [JsonProperty("sessionTickets")]
         public SessionTicketsResult SessionTickets { get; set; }
 
         /// <summary>
         /// True if OCSP stapling is deployed on the server
         /// </summary>
+        [JsonProperty("ocspStapling")]
         public bool OcspStapling { get; set; }
 
         /// <summary>
         /// RevocationStatus for the stapled OCSP response.
         /// </summary>
+        [JsonProperty("staplingRevocationStatus")]
         public RevocationStatus StaplingRevocationStatus { get; set; }
 
         /// <summary>
         /// Description of the problem with the stapled OCSP response, if any.
         /// </summary>
+        [JsonProperty("staplingRevocationErrorMessage")]
         public string StaplingRevocationErrorMessage { get; set; }
 
         /// <summary>
         /// If SNI support is required to access the web site.
         /// </summary>
+        [JsonProperty("sniRequired")]
         public bool SniRequired { get; set; }
 
         /// <summary>
         /// Status code of the final HTTP response seen. When submitting HTTP requests, redirections are followed, but only if they lead to the same hostname. 
         /// If this field is not available, that means the HTTP request failed.
         /// </summary>
+        [JsonProperty("httpStatusCode")]
         public int? HttpStatusCode { get; set; }
         
         /// <summary>
         /// Available on a server that responded with a redirection to some other hostname.
         /// </summary>
+        [JsonProperty("httpForwarding")]
         public string HttpForwarding { get; set; }
 
         /// <summary>
         /// True if the server supports at least one RC4 suite.
         /// </summary>
+        [JsonProperty("supportsRc4")]
         public bool SupportsRc4 { get; set; }
 
         /// <summary>
         /// Indicates support for Forward Secrecy
         /// </summary>
+        [JsonProperty("forwardSecrecy")]
         public ForwardSecrecyResult ForwardSecrecy { get; set; }
 
         /// <summary>
         /// True if RC4 is used with modern clients.
         /// </summary>
+        [JsonProperty("rc4WithModern")]
         public bool Rc4WithModern { get; set; }
 
         /// <summary>
@@ -173,37 +198,44 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// True if the server is vulnerable to the Heartbleed attack.
         /// </summary>
+        [JsonProperty("heartbleed")]
         public bool Heartbleed { get; set; }
 
         /// <summary>
         /// True if the server supports the Heartbeat extension.
         /// </summary>
+        [JsonProperty("heartbeat")]
         public bool Heartbeat { get; set; }
 
         /// <summary>
         /// Results of the CVE-2014-0224 test
         /// </summary>
+        [JsonProperty("openSslCcs")]
         public OpenSslCcsResult OpenSslCcs { get; set; }
 
         /// <summary>
         /// True if the endpoint is vulnerable to POODLE; false otherwise
         /// </summary>
+        [JsonProperty("poodle")]
         public bool Poodle { get; set; }
 
         /// <summary>
         /// Results of the POODLE TLS test
         /// </summary>
+        [JsonProperty("poodleTls")]
         public PoodleResult PoodleTls { get; set; }
 
         /// <summary>
         /// True if the server supports TLS_FALLBACK_SCSV, false if it doesn't. This field will not be available if the server's support 
         /// for TLS_FALLBACK_SCSV can't be tested because it supports only one protocol version (e.g., only TLS 1.2).
         /// </summary>
+        [JsonProperty("fallbackScsv")]
         public bool FallbackScsv { get; set; }
 
         /// <summary>
         /// True of the server is vulnerable to the FREAK attack, meaning it supports 512-bit key exchange.
         /// </summary>
+        [JsonProperty("freak")]
         public bool Freak { get; set; }
 
         /// <summary>

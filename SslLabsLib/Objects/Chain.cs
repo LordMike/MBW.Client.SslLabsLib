@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using SslLabsLib.Enums;
 
 namespace SslLabsLib.Objects
@@ -8,11 +9,13 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Certificates in the chain
         /// </summary>
+        [JsonProperty("certs")]
         public List<ChainCertificate> Certs { get; set; }
 
         /// <summary>
         /// The issues with this chain
         /// </summary>
+        [JsonProperty("issues")]
         public ChainIssues Issues { get; set; }
     }
 }
