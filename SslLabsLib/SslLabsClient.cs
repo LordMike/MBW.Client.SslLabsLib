@@ -25,6 +25,10 @@ namespace SslLabsLib
 
         public int CurrentAssesments { get; private set; }
 
+        public event Action CurrentAssesmentsChanged;
+
+        public event Action MaxAssesmentsChanged;
+
         public SslLabsClient()
             : this(new Uri("https://api.ssllabs.com/api/v2/"))
         {
@@ -86,6 +90,19 @@ namespace SslLabsLib
 
             string json = resp.Content.ReadAsStringAsync().Result;
             return JsonConvert.DeserializeObject<Endpoint>(json);
+        }
+
+        public bool TryStartAnalysis(string hostname, AnalyzeOptions options = AnalyzeOptions.None)
+        {
+            Analysis analysis;
+            return TryStartAnalysis(hostname, out analysis, options);
+        }
+
+        public bool TryStartAnalysis(string hostname, out Analysis analysis, AnalyzeOptions options = AnalyzeOptions.None)
+        {
+            AnalysisResult result = GetAnalysisInternal(hostname, null, options, out analysis);
+
+            return result == AnalysisResult.Success;
         }
 
         public Analysis GetAnalysisBlocking(string hostname, int? maxAge = null, AnalyzeOptions options = AnalyzeOptions.None, Action<Analysis> progressCallback = null)
@@ -196,9 +213,19 @@ namespace SslLabsLib
             {
                 int tmp;
                 if (header.Key == "X-Max-Assessments" && int.TryParse(header.Value.FirstOrDefault(), out tmp))
+                {
+                    bool changed = tmp != MaxAssesments;
                     MaxAssesments = tmp;
+                    if (changed)
+                        OnMaxAssesmentsChanged();
+                }
                 else if (header.Key == "X-Current-Assessments" && int.TryParse(header.Value.FirstOrDefault(), out tmp))
+                {
+                    bool changed = tmp != MaxAssesments;
                     CurrentAssesments = tmp;
+                    if (changed)
+                        OnCurrentAssesmentsChanged();
+                }
             }
         }
 
@@ -255,6 +282,20 @@ namespace SslLabsLib
             analysis = JsonConvert.DeserializeObject<Analysis>(json);
 
             return AnalysisResult.Success;
+        }
+
+        protected virtual void OnCurrentAssesmentsChanged()
+        {
+            Action handler = CurrentAssesmentsChanged;
+            if (handler != null)
+                handler();
+        }
+
+        protected virtual void OnMaxAssesmentsChanged()
+        {
+            Action handler = MaxAssesmentsChanged;
+            if (handler != null)
+                handler();
         }
 
         enum AnalysisResult
