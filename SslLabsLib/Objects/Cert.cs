@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using RestSharp.Deserializers;
 using SslLabsLib.Enums;
 
 namespace SslLabsLib.Objects
@@ -71,13 +70,13 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// CRL URIs extracted from the certificate
         /// </summary>
-        [DeserializeAs(Name = "crlURIs")]
+        //[Json.JsonArrayName = "crlURIs")]
         public List<string> CrlURIs { get; set; }
 
         /// <summary>
         /// OCSP URIs extracted from the certificate
         /// </summary>
-        [DeserializeAs(Name = "ocspURIs")]
+        //[JsonProperty(Name = "ocspURIs")]
         public List<string> OcspUrIs { get; set; }
 
         /// <summary>
@@ -98,7 +97,7 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Server Gated Cryptography support; integer:
         /// </summary>
-        [DeserializeAs(Name = "sgc")]
+        //[JsonProperty(Name = "sgc")]
         public ServerGatedCryptographySupport ServerGatedCryptography { get; set; }
 
         /// <summary>
@@ -114,7 +113,7 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// True if the certificate contains an embedded SCT; false otherwise.
         /// </summary> 
-        [DeserializeAs(Name = "sct")]
+        //[JsonProperty(Name = "sct")]
         public bool ContainsSignedCertificateTimestamp { get; set; }
     }
 }

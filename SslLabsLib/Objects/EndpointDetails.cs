@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using RestSharp.Deserializers;
+using Newtonsoft.Json;
 using SslLabsLib.Enums;
 
 namespace SslLabsLib.Objects
@@ -78,25 +78,25 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// The contents of the Strict-Transport-Security (STS) response header, if seen
         /// </summary>
-        [DeserializeAs(Name = "stsResponseHeader")]
+        [JsonProperty("stsResponseHeader")]
         public string StrictTransportSecurityResponseHeader { get; set; }
 
         /// <summary>
         /// The maxAge parameter extracted from the STS parameters; null if STS not seen, or -1 if the specified value is invalid (e.g., not a zero or a positive integer; the maximum value currently supported is 2,147,483,647)
         /// </summary>
-        [DeserializeAs(Name = "stsMaxAge")]
+        [JsonProperty( "stsMaxAge")]
         public int StrictTransportSecurityMaxAge { get; set; }
 
         /// <summary>
         /// True if the includeSubDomains STS parameter is set; null if STS not seen
         /// </summary>
-        [DeserializeAs(Name = "stsSubdomains")]
+        [JsonProperty( "stsSubdomains")]
         public bool StrictTransportSecuritySubdomains { get; set; }
 
         /// <summary>
         /// The contents of the Public-Key-Pinning response header, if seen
         /// </summary>
-        [DeserializeAs(Name = "pkpResponseHeader")]
+        [JsonProperty( "pkpResponseHeader")]
         public bool PublicKeyPinningResponseHeader { get; set; }
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Client simulation details
         /// </summary>
-        [DeserializeAs(Name = "sims")]
+        [JsonProperty("sims")]
         public SimulationDetails Simulations { get; set; }
 
         /// <summary>
@@ -215,7 +215,7 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Information about the availability of certificate transparency information (embedded SCTs):
         /// </summary>
-        [DeserializeAs(Name = "hasSct")]
+        [JsonProperty("hasSct")]
         public SctResult HasSct { get; set; }
     }
 }

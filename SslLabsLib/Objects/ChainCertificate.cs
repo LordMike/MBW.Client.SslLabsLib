@@ -1,5 +1,5 @@
 using System;
-using RestSharp.Deserializers;
+using Newtonsoft.Json;
 using SslLabsLib.Enums;
 
 namespace SslLabsLib.Objects
@@ -55,7 +55,7 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Signature algorithm
         /// </summary>
-        [DeserializeAs(Name = "sigAlg")]
+        [JsonProperty("sigAlg")]
         public string SignatureAlgorithm { get; set; }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Key algorithm
         /// </summary>
-        [DeserializeAs(Name = "keyAlg")]
+        [JsonProperty("keyAlg")]
         public string KeyAlgorithm { get; set; }
 
         /// <summary>

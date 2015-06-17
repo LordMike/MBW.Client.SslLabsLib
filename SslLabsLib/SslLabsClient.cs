@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading;
-using RestSharp;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 using SslLabsLib.Enums;
 using SslLabsLib.Objects;
 
@@ -13,7 +18,7 @@ namespace SslLabsLib
         private static TimeSpan _waitTimeScan = TimeSpan.FromSeconds(5);
         private static TimeSpan _waitTimeOverloaded = TimeSpan.FromSeconds(30);
 
-        private RestClient _restClient;
+        private HttpClient _restClient;
 
         public int MaxAssesments { get; private set; }
 
@@ -29,27 +34,20 @@ namespace SslLabsLib
             if (baseUrl == null)
                 throw new ArgumentNullException("baseUrl");
 
-            _restClient = new RestClient(baseUrl);
+            _restClient = new HttpClient();
+            _restClient.BaseAddress = baseUrl;
         }
 
         public Info GetInfo()
         {
-            RestRequest req = new RestRequest("info");
-            IRestResponse<Info> resp = _restClient.Execute<Info>(req);
-
-            ReadXHeaders(resp);
-
-            return resp.Data;
+            string json = _restClient.GetStringAsync("info").Result;
+            return JsonConvert.DeserializeObject<Info>(json);
         }
 
         public StatusCodes GetStatusCodes()
         {
-            RestRequest req = new RestRequest("getStatusCodes");
-            IRestResponse<StatusCodes> resp = _restClient.Execute<StatusCodes>(req);
-
-            ReadXHeaders(resp);
-
-            return resp.Data;
+            string json = _restClient.GetStringAsync("getStatusCodes").Result;
+            return JsonConvert.DeserializeObject<StatusCodes>(json);
         }
 
         public Analysis GetAnalysis(string hostname, int? maxAge = null, AnalyzeOptions options = AnalyzeOptions.None)
@@ -77,15 +75,16 @@ namespace SslLabsLib
 
         public Endpoint GetCachedEndpointAnalysis(string hostname, IPAddress endpoint)
         {
-            IRestRequest req = new RestRequest("getEndpointData")
-                .AddQueryParameter("host", hostname)
-                .AddQueryParameter("s", endpoint.ToString());
+            Dictionary<string, string> parms = new Dictionary<string, string>();
+            parms["s"] = endpoint.ToString();
+            parms["host"] = hostname;
 
-            IRestResponse<Endpoint> resp = _restClient.Execute<Endpoint>(req);
+            HttpResponseMessage resp = _restClient.GetAsync(BuildUrl("getEndpointData", parms)).Result;
 
             ReadXHeaders(resp);
 
-            return resp.Data;
+            string json = resp.Content.ReadAsStringAsync().Result;
+            return JsonConvert.DeserializeObject<Endpoint>(json);
         }
 
         public Analysis GetAnalysisBlocking(string hostname, int? maxAge = null, AnalyzeOptions options = AnalyzeOptions.None, Action<Analysis> progressCallback = null)
@@ -166,40 +165,62 @@ namespace SslLabsLib
             return analysis;
         }
 
-        private void ReadXHeaders<T>(IRestResponse<T> resp)
+        private string BuildUrl(string method, Dictionary<string, string> parms)
         {
-            foreach (Parameter header in resp.Headers)
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append(method);
+
+            bool first = true;
+            foreach (KeyValuePair<string, string> pair in parms)
+            {
+                if (!first)
+                    sb.Append("&");
+
+                sb.Append(pair.Key);
+                sb.Append("=");
+                sb.Append(Uri.EscapeUriString(pair.Value));
+
+                first = false;
+            }
+
+            return sb.ToString();
+        }
+
+        private void ReadXHeaders(HttpResponseMessage resp)
+        {
+            foreach (KeyValuePair<string, IEnumerable<string>> header in resp.Headers)
             {
                 int tmp;
-                if (header.Name == "X-Max-Assessments" && int.TryParse(header.Value as string, out tmp))
+                if (header.Key == "X-Max-Assessments" && int.TryParse(header.Value.FirstOrDefault(), out tmp))
                     MaxAssesments = tmp;
-                else if (header.Name == "X-Current-Assessments" && int.TryParse(header.Value as string, out tmp))
+                else if (header.Key == "X-Current-Assessments" && int.TryParse(header.Value.FirstOrDefault(), out tmp))
                     CurrentAssesments = tmp;
             }
         }
 
         private AnalysisResult GetAnalysisInternal(string hostname, int? maxAge, AnalyzeOptions options, out Analysis analysis)
         {
-            IRestRequest req = new RestRequest("analyze")
-                      .AddQueryParameter("host", hostname);
+            Dictionary<string, string> parms = new Dictionary<string, string>();
+            parms["host"] = hostname;
 
             if (options.HasFlag(AnalyzeOptions.Publish))
-                req.AddQueryParameter("publish", "on");
+                parms["publish"] = "on";
 
             if (options.HasFlag(AnalyzeOptions.StartNew))
-                req.AddQueryParameter("startNew", "on");
+                parms["startNew"] = "on";
             else if (options.HasFlag(AnalyzeOptions.FromCache))
-                req.AddQueryParameter("fromCache", "on");
+                parms["fromCache"] = "on";
 
             if (options.HasFlag(AnalyzeOptions.ReturnAll))
-                req.AddQueryParameter("all", "on");
+                parms["all"] = "on";
             else if (options.HasFlag(AnalyzeOptions.ReturnAllWhenDone))
-                req.AddQueryParameter("all", "done");
+                parms["all"] = "done";
 
             if (options.HasFlag(AnalyzeOptions.IgnoreMismatch))
-                req.AddQueryParameter("ignoreMismatch", "on");
+                parms["ignoreMismatch"] = "on";
 
-            IRestResponse<Analysis> resp = _restClient.Execute<Analysis>(req);
+            HttpResponseMessage resp = _restClient.GetAsync(BuildUrl("analyze", parms)).Result;
 
             ReadXHeaders(resp);
 
@@ -224,8 +245,8 @@ namespace SslLabsLib
             if (resp.StatusCode != HttpStatusCode.OK)
                 return AnalysisResult.UnknownError;
 
-            // Success
-            analysis = resp.Data;
+            string json = resp.Content.ReadAsStringAsync().Result;
+            analysis = JsonConvert.DeserializeObject<Analysis>(json);
 
             return AnalysisResult.Success;
         }

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using RestSharp.Deserializers;
+using Newtonsoft.Json;
 
 namespace SslLabsLib.Objects
 {
@@ -8,7 +8,7 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Simulations
         /// </summary>
-        [DeserializeAs(Name = "Results")]
+        [JsonProperty("Results")]
         public List<Simulation> Simulations { get; set; }
     }
 }

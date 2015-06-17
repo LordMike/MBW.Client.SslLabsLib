@@ -1,4 +1,4 @@
-using RestSharp.Deserializers;
+using Newtonsoft.Json;
 
 namespace SslLabsLib.Objects
 {
@@ -37,19 +37,19 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// DH params, p component
         /// </summary>
-        [DeserializeAs(Name = "dhP")]
+        [JsonProperty("dhP")]
         public string DhP { get; set; }
 
         /// <summary>
         /// DH params, g component
         /// </summary>
-        [DeserializeAs(Name = "dhG")]
+        [JsonProperty("dhG")]
         public string DhG { get; set; }
 
         /// <summary>
         /// DH params, Ys component
         /// </summary>
-        [DeserializeAs(Name = "dhYs")]
+        [JsonProperty("dhYs")]
         public string DhYs { get; set; }
 
         /// <summary>
