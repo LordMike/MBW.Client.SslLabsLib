@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Security;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using ARSoft.Tools.Net.Dns;
 using Mono.Options;
 using Newtonsoft.Json;
 using SslLabsLib;
@@ -19,6 +23,8 @@ namespace SslLabsMassScan
         private const int DefaultMaxAssesments = 10;
         private const int DefaultMaxAge = 168;
 
+        private static DnsClient _dnsClient;
+
         static int Main(string[] args)
         {
             Options options = new Options();
@@ -30,6 +36,8 @@ namespace SslLabsMassScan
             parser.Add("o|output=", "Output directory, will be created", s => options.Output = s);
             parser.Add("n|new", "Forces new scans", s => options.ForceNew = true);
             parser.Add("p|publish", "Published scans", s => options.Publish = true);
+            parser.Add("c|check", "Perform preliminary checking before submitting to SslLabs", s => options.Check = true);
+            parser.Add("check-dns=", "Preliminary checking dns servers, comma separated", s => options.CheckDns = s);
             parser.Add("w|overwrite", "Overwrite local scans, older than MaxAge", s => options.Overwrite = true);
             parser.Add<int>("a|maxage=", "Specify a MaxAge parameter, default: " + DefaultMaxAge, s => options.MaxAge = s);
             parser.Add<int>("m|max=", "Max concurrent scans, default: " + DefaultMaxAssesments, s => options.MaxConcurrentAssesments = s);
@@ -82,13 +90,18 @@ namespace SslLabsMassScan
                 return 2;
             }
 
+            _dnsClient = DnsClient.Default;
+
+            if (!string.IsNullOrEmpty(options.CheckDns))
+                _dnsClient = new DnsClient(options.CheckDns.Split(',').Select(IPAddress.Parse).ToList(), 3000);
+
             Console.WriteLine("Beginning work on " + domains.Count + " domains");
 
             Uri endpoint = new Uri("https://api.ssllabs.com/api/v2/");
             if (options.Endpoint == "dev")
                 endpoint = new Uri("https://api.dev.ssllabs.com/api/v2/");
 
-            int runningTasks = 0, completedTasks = 0;
+            int completedTasks = 0;
             SslLabsClient client = new SslLabsClient(endpoint);
 
             client.WaitTimePreScan = TimeSpan.FromSeconds(20);
@@ -120,7 +133,7 @@ namespace SslLabsMassScan
                     lastStatus = DateTime.UtcNow;
 
                     Console.WriteLine("Queue: " + domains.Count +
-                                      ", running: " + runningTasks +
+                                      ", running: " + client.CurrentAssesments +
                                       " (of " + client.MaxAssesments + "), " +
                                       "completed: " + completedTasks);
                 }
@@ -166,28 +179,38 @@ namespace SslLabsMassScan
                     }
                 }
 
+                // Perform preliminary check?
+                if (options.Check)
+                {
+                    bool passPrelim = DoPrelimCheck(domain);
+
+                    if (!passPrelim)
+                    {
+                        // Skip
+                        domains.Dequeue();
+                        continue;
+                    }
+                }
+
                 // Attempt to start the task
                 while (true)
                 {
-                    if (runningTasks < options.MaxConcurrentAssesments)
+                    bool didStart;
+                    try
                     {
-                        bool didStart;
-                        try
-                        {
-                            didStart = client.TryStartAnalysis(domain, maxAge, out analysis, startOptions);
-                        }
-                        catch (WebException ex)
-                        {
-                            Console.WriteLine("Webexception starting scan, waiting 3s: " + ex.Message);
-                            limitChangedEvent.WaitOne(3000);
-                            continue;
-                        }
+                        didStart = client.TryStartAnalysis(domain, maxAge, out analysis, startOptions);
+                    }
+                    catch (WebException ex)
+                    {
+                        Console.WriteLine("Webexception starting scan, waiting 3s: " + ex.Message);
+                        limitChangedEvent.WaitOne(3000);
+                        continue;
+                    }
 
-                        if (didStart)
-                        {
-                            printStatus();
-                            break;
-                        }
+                    if (didStart)
+                    {
+                        printStatus();
+                        break;
                     }
 
                     // Wait for one to free up, fall back to trying every 30s
@@ -226,27 +249,60 @@ namespace SslLabsMassScan
                     Console.WriteLine("Completed " + domain);
 
                     Interlocked.Increment(ref completedTasks);
-                    Interlocked.Decrement(ref runningTasks);
 
                     limitChangedEvent.Set();
                 });
-
-                Interlocked.Increment(ref runningTasks);
             }
 
             Timer timer = new Timer(2000);
             timer.Elapsed += (sender, eventArgs) => printStatus();
             timer.Start();
 
-            while (runningTasks != 0)
+            while (true)
             {
-                // Wait for tasks to finish, fall back to checking every15s
+                Info info = client.GetInfo();
+                if (info.CurrentAssessments == 0)
+                    break;
+
+                // Wait for tasks to finish, fall back to checking every 15s
                 limitChangedEvent.WaitOne(15000);
             }
 
             timer.Stop();
 
             return 0;
+        }
+
+        private static bool DoPrelimCheck(string domain)
+        {
+            try
+            {
+                DnsMessage dnsResult = _dnsClient.Resolve(domain);
+                IEnumerable<IPAddress> addresses = dnsResult.AnswerRecords.OfType<ARecord>().Select(s => s.Address);
+
+                // If any IP works, make it pass
+                foreach (IPAddress address in addresses)
+                {
+                    using (TcpClient tcp = new TcpClient(address.ToString(), 443))
+                    using (Stream tcpStream = tcp.GetStream())
+                    using (SslStream ssl = new SslStream(tcpStream, false, (sender, certificate, chain, errors) =>
+                    {
+                        // Validate that the certificate matches the domain name - only (SSLLabs does the actual certificate checking)
+                        return !errors.HasFlag(SslPolicyErrors.RemoteCertificateNameMismatch);
+                    }))
+                    {
+                        ssl.AuthenticateAsClient(domain);
+
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Prelim check for " + domain + " failed: " + ex.Message);
+            }
+
+            return false;
         }
     }
 
@@ -260,5 +316,7 @@ namespace SslLabsMassScan
         public bool Overwrite { get; set; }
         public int MaxAge { get; set; }
         public string Endpoint { get; set; }
+        public bool Check { get; set; }
+        public string CheckDns { get; set; }
     }
 }
