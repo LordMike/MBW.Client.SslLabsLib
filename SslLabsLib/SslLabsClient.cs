@@ -5,9 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using SslLabsLib.Enums;
 using SslLabsLib.Objects;
 
@@ -15,9 +13,20 @@ namespace SslLabsLib
 {
     public class SslLabsClient
     {
-        private static TimeSpan _waitTimePreScan = TimeSpan.FromSeconds(10);
-        private static TimeSpan _waitTimeScan = TimeSpan.FromSeconds(5);
-        private static TimeSpan _waitTimeOverloaded = TimeSpan.FromSeconds(30);
+        /// <summary>
+        /// Time between lookups, before a scan has started (before mvoing to IN_PROGRESS)
+        /// </summary>
+        public TimeSpan WaitTimePreScan { get; set; }
+
+        /// <summary>
+        /// Time between lookups, once a scan has started (moved to IN_PROGRESS, before READY or ERROR)
+        /// </summary>
+        public TimeSpan WaitTimeScan { get; set; }
+
+        /// <summary>
+        /// Time to pause, once SSLLabs report the service is overloaded. This is not the same as rate limiting.
+        /// </summary>
+        public TimeSpan WaitTimeOverloaded { get; set; }
 
         private HttpClient _restClient;
 
@@ -41,6 +50,10 @@ namespace SslLabsLib
 
             _restClient = new HttpClient();
             _restClient.BaseAddress = baseUrl;
+
+            WaitTimePreScan = TimeSpan.FromSeconds(10);
+            WaitTimeScan = TimeSpan.FromSeconds(5);
+            WaitTimeOverloaded = TimeSpan.FromSeconds(30);
         }
 
         public Info GetInfo()
@@ -92,15 +105,15 @@ namespace SslLabsLib
             return JsonConvert.DeserializeObject<Endpoint>(json);
         }
 
-        public bool TryStartAnalysis(string hostname, AnalyzeOptions options = AnalyzeOptions.None)
+        public bool TryStartAnalysis(string hostname, int? maxAge = null, AnalyzeOptions options = AnalyzeOptions.None)
         {
             Analysis analysis;
-            return TryStartAnalysis(hostname, out analysis, options);
+            return TryStartAnalysis(hostname, maxAge, out analysis, options);
         }
 
-        public bool TryStartAnalysis(string hostname, out Analysis analysis, AnalyzeOptions options = AnalyzeOptions.None)
+        public bool TryStartAnalysis(string hostname, int? maxAge, out Analysis analysis, AnalyzeOptions options = AnalyzeOptions.None)
         {
-            AnalysisResult result = GetAnalysisInternal(hostname, null, options, out analysis);
+            AnalysisResult result = GetAnalysisInternal(hostname, maxAge, options, out analysis);
 
             return result == AnalysisResult.Success;
         }
@@ -134,7 +147,7 @@ namespace SslLabsLib
             options &= ~AnalyzeOptions.StartNew;
 
             // Loop till we're done
-            TimeSpan toWait = _waitTimePreScan;
+            TimeSpan toWait = WaitTimePreScan;
 
             while (true)
             {
@@ -151,18 +164,18 @@ namespace SslLabsLib
 
                 if (result == AnalysisResult.RateLimit || result == AnalysisResult.Overloaded)
                 {
-                    toWait = _waitTimeOverloaded;
+                    toWait = WaitTimeOverloaded;
                 }
                 else if (result == AnalysisResult.Success)
                 {
-                    toWait = _waitTimePreScan;
+                    toWait = WaitTimePreScan;
 
                     // Success
                     // States: DNS, ERROR, IN_PROGRESS, and READY.
                     if (analysis.Status == AnalysisStatus.DNS || analysis.Status == AnalysisStatus.IN_PROGRESS)
                     {
                         // Underways
-                        toWait = _waitTimeScan;
+                        toWait = WaitTimeScan;
                     }
                     else if (analysis.Status == AnalysisStatus.READY || analysis.Status == AnalysisStatus.ERROR)
                     {

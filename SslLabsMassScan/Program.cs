@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Mono.Options;
@@ -16,18 +17,23 @@ namespace SslLabsMassScan
     class Program
     {
         private const int DefaultMaxAssesments = 10;
+        private const int DefaultMaxAge = 168;
 
         static int Main(string[] args)
         {
             Options options = new Options();
-            options.Max = DefaultMaxAssesments;
+            options.MaxConcurrentAssesments = DefaultMaxAssesments;
+            options.MaxAge = DefaultMaxAge;
 
             OptionSet parser = new OptionSet();
             parser.Add("f|file=", "Input file, one host pr. line, required", s => options.Input = s);
             parser.Add("o|output=", "Output directory, will be created", s => options.Output = s);
             parser.Add("n|new", "Forces new scans", s => options.ForceNew = true);
             parser.Add("p|publish", "Published scans", s => options.Publish = true);
-            parser.Add<int>("m|max=", "Max concurrent scans, default: " + DefaultMaxAssesments, s => options.Max = s);
+            parser.Add("w|overwrite", "Overwrite local scans, older than MaxAge", s => options.Overwrite = true);
+            parser.Add<int>("a|maxage=", "Specify a MaxAge parameter, default: " + DefaultMaxAge, s => options.MaxAge = s);
+            parser.Add<int>("m|max=", "Max concurrent scans, default: " + DefaultMaxAssesments, s => options.MaxConcurrentAssesments = s);
+            parser.Add("e|endpoint=", "Endpoint. 'prod' or 'dev'", s => options.Endpoint = s);
 
             List<string> excessArgs = parser.Parse(args);
 
@@ -78,22 +84,47 @@ namespace SslLabsMassScan
 
             Console.WriteLine("Beginning work on " + domains.Count + " domains");
 
+            Uri endpoint = new Uri("https://api.ssllabs.com/api/v2/");
+            if (options.Endpoint == "dev")
+                endpoint = new Uri("https://api.dev.ssllabs.com/api/v2/");
+
             int runningTasks = 0, completedTasks = 0;
-            SslLabsClient client = new SslLabsClient();
+            SslLabsClient client = new SslLabsClient(endpoint);
+
+            client.WaitTimePreScan = TimeSpan.FromSeconds(20);
+            client.WaitTimeScan = TimeSpan.FromSeconds(10);
+
+            int? maxAge = options.MaxAge;
 
             AnalyzeOptions startOptions = AnalyzeOptions.None;
             if (options.ForceNew)
+            {
                 startOptions |= AnalyzeOptions.StartNew;
+                maxAge = null;
+            }
             else
                 startOptions = AnalyzeOptions.ReturnAllIfDone;
 
             if (options.Publish)
                 startOptions |= AnalyzeOptions.Publish;
 
-            Action printStatus = () => Console.WriteLine("Queue: " + domains.Count +
-                                                         ", running: " + runningTasks +
-                                                         " (of " + client.MaxAssesments + "), " +
-                                                         "completed: " + completedTasks);
+            DateTime lastStatus = DateTime.UtcNow;
+            object lastStatusLock = new object();
+            Action printStatus = () =>
+            {
+                lock (lastStatusLock)
+                {
+                    if ((DateTime.UtcNow - lastStatus).TotalSeconds < 5)
+                        return;
+
+                    lastStatus = DateTime.UtcNow;
+
+                    Console.WriteLine("Queue: " + domains.Count +
+                                      ", running: " + runningTasks +
+                                      " (of " + client.MaxAssesments + "), " +
+                                      "completed: " + completedTasks);
+                }
+            };
 
             AutoResetEvent limitChangedEvent = new AutoResetEvent(false);
 
@@ -103,14 +134,54 @@ namespace SslLabsMassScan
             while (domains.Any())
             {
                 string domain = domains.Peek();
+                string scanPath = Path.Combine(options.Output, domain + ".scan");
+
+                // Is it done already?
+                Analysis analysis;
+
+                if (File.Exists(scanPath))
+                {
+                    if (options.Overwrite && maxAge.HasValue)
+                    {
+                        analysis = JsonConvert.DeserializeObject<Analysis>(File.ReadAllText(scanPath));
+
+                        int age = (int)(DateTime.UtcNow - analysis.TestTime).TotalHours;
+                        if (age > maxAge)
+                        {
+                            // Process this
+                            analysis = null;
+                        }
+                        else
+                        {
+                            // Skip
+                            domains.Dequeue();
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        // Skip
+                        domains.Dequeue();
+                        continue;
+                    }
+                }
 
                 // Attempt to start the task
-                Analysis analysis;
                 while (true)
                 {
-                    if (runningTasks < options.Max)
+                    if (runningTasks < options.MaxConcurrentAssesments)
                     {
-                        bool didStart = client.TryStartAnalysis(domain, out analysis, startOptions);
+                        bool didStart;
+                        try
+                        {
+                            didStart = client.TryStartAnalysis(domain, maxAge, out analysis, startOptions);
+                        }
+                        catch (WebException ex)
+                        {
+                            Console.WriteLine("Webexception starting scan, waiting 3s: " + ex.Message);
+                            limitChangedEvent.WaitOne(3000);
+                            continue;
+                        }
 
                         if (didStart)
                         {
@@ -131,15 +202,26 @@ namespace SslLabsMassScan
 
                 Task.Factory.StartNew(() =>
                 {
-                    Analysis innerAnalysis;
+                    Analysis innerAnalysis = null;
                     if (analysis != null && analysis.Status == AnalysisStatus.READY)
                         // Use the one we fetched immediately
                         innerAnalysis = analysis;
-                    else
-                        // Block till we have an analysis
-                        innerAnalysis = client.GetAnalysisBlocking(domain);
 
-                    File.WriteAllText(Path.Combine(options.Output, domain + ".scan"), JsonConvert.SerializeObject(innerAnalysis));
+                    while (innerAnalysis == null)
+                    {
+                        try
+                        {
+                            // Block till we have an analysis
+                            innerAnalysis = client.GetAnalysisBlocking(domain);
+                        }
+                        catch (WebException ex)
+                        {
+                            Console.WriteLine("Webexception waiting for scan, waiting 3s: " + ex.Message);
+                            Thread.Sleep(3000);
+                        }
+                    }
+
+                    File.WriteAllText(scanPath, JsonConvert.SerializeObject(innerAnalysis));
 
                     Console.WriteLine("Completed " + domain);
 
@@ -174,6 +256,9 @@ namespace SslLabsMassScan
         public string Output { get; set; }
         public bool ForceNew { get; set; }
         public bool Publish { get; set; }
-        public int Max { get; set; }
+        public int MaxConcurrentAssesments { get; set; }
+        public bool Overwrite { get; set; }
+        public int MaxAge { get; set; }
+        public string Endpoint { get; set; }
     }
 }
