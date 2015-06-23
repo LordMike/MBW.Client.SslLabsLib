@@ -206,6 +206,12 @@ namespace SslLabsMassScan
                         limitChangedEvent.WaitOne(3000);
                         continue;
                     }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Exception while starting scan, waiting 30s: " + ex.Message);
+                        Thread.Sleep(30000);
+                        continue;
+                    }
 
                     if (didStart)
                     {
@@ -241,6 +247,11 @@ namespace SslLabsMassScan
                         {
                             Console.WriteLine("Webexception waiting for scan, waiting 3s: " + ex.Message);
                             Thread.Sleep(3000);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Exception while waiting for scan, waiting 30s: " + ex.Message);
+                            Thread.Sleep(30000);
                         }
                     }
 

@@ -266,7 +266,15 @@ namespace SslLabsLib
             if (maxAge.HasValue)
                 parms["maxAge"] = maxAge.ToString();
 
-            HttpResponseMessage resp = _restClient.GetAsync(BuildUrl("analyze", parms)).Result;
+            HttpResponseMessage resp;
+            try
+            {
+                resp = _restClient.GetAsync(BuildUrl("analyze", parms)).Result;
+            }
+            catch (AggregateException ex)
+            {
+                throw ex.InnerException;
+            }
 
             ReadXHeaders(resp);
 
