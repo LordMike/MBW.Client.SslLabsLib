@@ -48,3 +48,9 @@ There are a number of options available, originally documented [here](https://gi
 
 * **AnalyzeOptions.IgnoreMismatch** -- Sets `ignoreMismatch` to `on`. Will instruct SSL Labs to proceed with the analysis, even if the certificate provided by the host does not match the domain queried.
 
+# Example clients
+The following example clients are provided.
+
+* **SslLabsCli** -- implementation of `ssllabs-scan` in C#, to showcase the Client and how to use it. Is very straight forward.
+
+* **SslLabsMassScan** -- implementation of a builk scanner, which can take a domain name list and sequentiall scan the domains. Can be used for data analysis. This scanner will dynamically adjust to the limits set by the API.
