@@ -34,7 +34,7 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Platform
         /// </summary>
-        [JsonProperty("platform")]
+        [JsonProperty("platform", NullValueHandling = NullValueHandling.Ignore)]
         public string Platform { get; set; }
     }
 }

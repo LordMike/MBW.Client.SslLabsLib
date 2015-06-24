@@ -37,31 +37,31 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Strength of DH params (e.g., 1024)
         /// </summary>
-        [JsonProperty("dhStrength")]
+        [JsonProperty("dhStrength", NullValueHandling = NullValueHandling.Ignore)]
         public string DhStrength { get; set; }
 
         /// <summary>
         /// DH params, p component
         /// </summary>
-        [JsonProperty("dhP")]
+        [JsonProperty("dhP", NullValueHandling = NullValueHandling.Ignore)]
         public string DhP { get; set; }
 
         /// <summary>
         /// DH params, g component
         /// </summary>
-        [JsonProperty("dhG")]
+        [JsonProperty("dhG", NullValueHandling = NullValueHandling.Ignore)]
         public string DhG { get; set; }
 
         /// <summary>
         /// DH params, Ys component
         /// </summary>
-        [JsonProperty("dhYs")]
+        [JsonProperty("dhYs", NullValueHandling = NullValueHandling.Ignore)]
         public string DhYs { get; set; }
 
         /// <summary>
         /// 0 if the suite is insecure, null otherwise
         /// </summary>
-        [JsonProperty("q")]
+        [JsonProperty("q", NullValueHandling = NullValueHandling.Ignore)]
         public int? Q { get; set; }
     }
 }

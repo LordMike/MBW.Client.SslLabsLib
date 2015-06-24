@@ -43,7 +43,7 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Status message in English. When status is ERROR, this field will contain an error message.
         /// </summary>
-        [JsonProperty("statusMessage")]
+        [JsonProperty("statusMessage", NullValueHandling = NullValueHandling.Ignore)]
         public string StatusMessage { get; set; }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// The list of certificate hostnames collected from the certificates seen during assessment. The hostnames may not be valid.
         /// </summary>
-        [JsonProperty("certHostnames")]
+        [JsonProperty("certHostnames", NullValueHandling = NullValueHandling.Ignore)]
         public List<string> CertHostnames { get; set; }
     }
 }

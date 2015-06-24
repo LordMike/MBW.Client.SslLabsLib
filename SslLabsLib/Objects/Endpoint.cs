@@ -14,7 +14,7 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Server name retrieved via reverse DNS
         /// </summary>
-        [JsonProperty("serverName")]
+        [JsonProperty("serverName", NullValueHandling = NullValueHandling.Ignore)]
         public string ServerName { get; set; }
 
         /// <summary>
@@ -26,13 +26,13 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Code of the operation currently in progress
         /// </summary>
-        [JsonProperty("statusDetails")]
+        [JsonProperty("statusDetails", NullValueHandling = NullValueHandling.Ignore)]
         public string StatusDetails { get; set; }
 
         /// <summary>
         /// Description of the operation currently in progress
         /// </summary>
-        [JsonProperty("statusDetailsMessage")]
+        [JsonProperty("statusDetailsMessage", NullValueHandling = NullValueHandling.Ignore)]
         public string StatusDetailsMessage { get; set; }
 
         /// <summary>

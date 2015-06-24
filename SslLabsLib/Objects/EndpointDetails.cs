@@ -89,19 +89,19 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// The maxAge parameter extracted from the STS parameters; null if STS not seen, or -1 if the specified value is invalid (e.g., not a zero or a positive integer; the maximum value currently supported is 2,147,483,647)
         /// </summary>
-        [JsonProperty( "stsMaxAge")]
+        [JsonProperty("stsMaxAge")]
         public int StrictTransportSecurityMaxAge { get; set; }
 
         /// <summary>
         /// True if the includeSubDomains STS parameter is set; null if STS not seen
         /// </summary>
-        [JsonProperty( "stsSubdomains")]
+        [JsonProperty("stsSubdomains")]
         public bool StrictTransportSecuritySubdomains { get; set; }
 
         /// <summary>
         /// The contents of the Public-Key-Pinning response header, if seen
         /// </summary>
-        [JsonProperty( "pkpResponseHeader")]
+        [JsonProperty("pkpResponseHeader")]
         public bool PublicKeyPinningResponseHeader { get; set; }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// List of supported protocols, separated by spaces
         /// </summary>
-        [JsonProperty("npnProtocols")]
+        [JsonProperty("npnProtocols", NullValueHandling = NullValueHandling.Ignore)]
         public string NpnProtocols { get; set; }
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Description of the problem with the stapled OCSP response, if any.
         /// </summary>
-        [JsonProperty("staplingRevocationErrorMessage")]
+        [JsonProperty("staplingRevocationErrorMessage", NullValueHandling = NullValueHandling.Ignore)]
         public string StaplingRevocationErrorMessage { get; set; }
 
         /// <summary>
@@ -164,11 +164,11 @@ namespace SslLabsLib.Objects
         /// </summary>
         [JsonProperty("httpStatusCode")]
         public int? HttpStatusCode { get; set; }
-        
+
         /// <summary>
         /// Available on a server that responded with a redirection to some other hostname.
         /// </summary>
-        [JsonProperty("httpForwarding")]
+        [JsonProperty("httpForwarding", NullValueHandling = NullValueHandling.Ignore)]
         public string HttpForwarding { get; set; }
 
         /// <summary>

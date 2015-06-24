@@ -25,13 +25,13 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// Some servers have SSLv2 protocol enabled, but with all SSLv2 cipher suites disabled. In that case, this field is set to true.
         /// </summary>
-        [JsonProperty("v2SuitesDisabled")]
+        [JsonProperty("v2SuitesDisabled", NullValueHandling = NullValueHandling.Ignore)]
         public string V2SuitesDisabled { get; set; }
 
         /// <summary>
         /// 0 if the protocol is insecure, null otherwise
         /// </summary>
-        [JsonProperty("q")]
+        [JsonProperty("q", NullValueHandling = NullValueHandling.Ignore)]
         public int? Q { get; set; }
     }
 }

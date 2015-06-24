@@ -31,7 +31,7 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// 0 if key is insecure, null otherwise
         /// </summary>
-        [JsonProperty("q")]
+        [JsonProperty("q", NullValueHandling = NullValueHandling.Ignore)]
         public int? Q { get; set; }
     }
 }

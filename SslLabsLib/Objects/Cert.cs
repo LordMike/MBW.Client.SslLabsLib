@@ -103,7 +103,7 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// E for Extended Validation certificates; may be null if unable to determine
         /// </summary>
-        [JsonProperty("validationType")]
+        [JsonProperty("validationType", NullValueHandling = NullValueHandling.Ignore)]
         public string ValidationType { get; set; }
 
         /// <summary>
