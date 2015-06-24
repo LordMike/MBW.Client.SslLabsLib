@@ -6,6 +6,9 @@ The easiest way to get the library is to use Nuget. The library has been publish
 
     Install-Package SslLabsLib -Pre
 
+# Version
+The library is currently in version 0.2.1-beta (on Nuget), and follows engine version `1.18.1`.
+
 # Dependencies
 
 * Newtonsoft.Json -- For parsing JSON documents
