@@ -4,10 +4,10 @@ This is an SSL Labs API client wrapper for [SSLLabs asssesment tool](https://www
 # Installation
 The easiest way to get the library is to use Nuget. The library has been published [here](https://www.nuget.org/packages/SslLabsLib/), and is also available [at Github](https://github.com/LordMike/SslLabsLib) in source form. The following Nuget command will fetch the package for you.
 
-    Install-Package SslLabsLib -Pre
+    Install-Package SslLabsLib
 
 # Version
-The library is currently in version 0.2.1-beta (on Nuget), and follows engine version `1.18.1`.
+The library is currently in version `0.3.0` (on Nuget), and follows engine version `1.18.1`.
 
 # Dependencies
 
