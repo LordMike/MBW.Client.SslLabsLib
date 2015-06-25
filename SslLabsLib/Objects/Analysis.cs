@@ -85,7 +85,8 @@ namespace SslLabsLib.Objects
         public List<Endpoint> Endpoints { get; set; }
 
         /// <summary>
-        /// The list of certificate hostnames collected from the certificates seen during assessment. The hostnames may not be valid.
+        /// The list of certificate hostnames collected from the certificates seen during assessment. The hostnames may not be valid. 
+        /// This field is available only if the server certificate doesn't match the requested hostname. In that case, this field saves you some time as you don't have to inspect the certificates yourself to find out what valid hostnames might be.
         /// </summary>
         [JsonProperty("certHostnames", NullValueHandling = NullValueHandling.Ignore)]
         public List<string> CertHostnames { get; set; }
