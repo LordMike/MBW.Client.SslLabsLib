@@ -10,5 +10,10 @@ namespace SslLabsLib.Objects
         /// </summary>
         [JsonProperty("results")]
         public List<Simulation> Simulations { get; set; }
+
+        public SimulationDetails()
+        {
+            Simulations = new List<Simulation>();
+        }
     }
 }

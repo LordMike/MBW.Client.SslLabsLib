@@ -243,5 +243,15 @@ namespace SslLabsLib.Objects
         /// </summary>
         [JsonProperty("hasSct")]
         public SctResult HasSct { get; set; }
+
+        public EndpointDetails()
+        {
+            Key = new Key();
+            Cert = new Cert();
+            Chain = new Chain();
+            Protocols = new List<Protocol>();
+            Suites = new Suites();
+            Simulations = new SimulationDetails();
+        }
     }
 }

@@ -34,5 +34,10 @@ namespace SslLabsLib.Objects
         /// </summary>
         [JsonProperty("messages")]
         public List<string> Messages { get; set; }
+
+        public Info()
+        {
+            Messages = new List<string>();
+        }
     }
 }

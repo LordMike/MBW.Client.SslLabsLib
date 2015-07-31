@@ -33,5 +33,10 @@ namespace SslLabsLib.Objects
         /// </summary>
         [JsonProperty("suiteId")]
         public int SuiteId { get; set; }
+
+        public Simulation()
+        {
+            Client = new Client();
+        }
     }
 }
