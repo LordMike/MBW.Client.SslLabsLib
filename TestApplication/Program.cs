@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using SslLabsLib;
 using SslLabsLib.Enums;
 using SslLabsLib.Objects;
