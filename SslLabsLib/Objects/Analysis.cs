@@ -90,5 +90,11 @@ namespace SslLabsLib.Objects
         /// </summary>
         [JsonProperty("certHostnames", NullValueHandling = NullValueHandling.Ignore)]
         public List<string> CertHostnames { get; set; }
+
+        public Analysis()
+        {
+            Endpoints = new List<Endpoint>();
+            CertHostnames = new List<string>();
+        }
     }
 }

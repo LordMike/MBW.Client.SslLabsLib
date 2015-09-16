@@ -117,5 +117,13 @@ namespace SslLabsLib.Objects
         /// </summary> 
         [JsonProperty("sct")]
         public bool ContainsSignedCertificateTimestamp { get; set; }
+
+        public Cert()
+        {
+            CommonNames = new List<string>();
+            AltNames = new List<string>();
+            CrlURIs = new List<string>();
+            OcspUrIs = new List<string>();
+        }
     }
 }

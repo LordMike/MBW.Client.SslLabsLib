@@ -88,5 +88,10 @@ namespace SslLabsLib.Objects
         /// </summary>
         [JsonProperty("details")]
         public EndpointDetails Details { get; set; }
+
+        public Endpoint()
+        {
+            Details = new EndpointDetails();
+        }
     }
 }

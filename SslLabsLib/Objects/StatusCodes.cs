@@ -11,5 +11,10 @@ namespace SslLabsLib.Objects
         /// </summary>
         [JsonProperty("statusDetails")]
         public Dictionary<string, string> StatusDetails { get; set; }
+
+        public StatusCodes()
+        {
+            StatusDetails = new Dictionary<string, string>();
+        }
     }
 }

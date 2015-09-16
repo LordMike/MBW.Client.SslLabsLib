@@ -17,5 +17,10 @@ namespace SslLabsLib.Objects
         /// </summary>
         [JsonProperty("issues")]
         public ChainIssues Issues { get; set; }
+
+        public Chain()
+        {
+            Certs = new List<ChainCertificate>();
+        }
     }
 }

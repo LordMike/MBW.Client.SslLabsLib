@@ -16,5 +16,10 @@ namespace SslLabsLib.Objects
         /// </summary>
         [JsonProperty("preference")]
         public bool Preference { get; set; }
+
+        public Suites()
+        {
+            List = new List<Ciphersuite>();
+        }
     }
 }

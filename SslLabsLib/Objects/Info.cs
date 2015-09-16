@@ -40,5 +40,10 @@ namespace SslLabsLib.Objects
         /// </summary>
         [JsonProperty("newAssessmentCoolOff")]
         public int NewAssessmentCoolOff { get; set; }
+		
+        public Info()
+        {
+            Messages = new List<string>();
+        }
     }
 }

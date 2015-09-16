@@ -102,7 +102,7 @@ namespace SslLabsLib.Objects
         /// The contents of the Public-Key-Pinning response header, if seen
         /// </summary>
         [JsonProperty("pkpResponseHeader")]
-        public bool PublicKeyPinningResponseHeader { get; set; }
+        public string PublicKeyPinningResponseHeader { get; set; }
 
         /// <summary>
         /// This is an integer value that describes endpoint support for session resumption.
@@ -267,5 +267,15 @@ namespace SslLabsLib.Objects
         /// </summary>
         [JsonProperty("logjam")]
         public bool LogJam { get; set; }
+		
+        public EndpointDetails()
+        {
+            Key = new Key();
+            Cert = new Cert();
+            Chain = new Chain();
+            Protocols = new List<Protocol>();
+            Suites = new Suites();
+            Simulations = new SimulationDetails();
+        }
     }
 }

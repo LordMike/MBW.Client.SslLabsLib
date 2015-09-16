@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Security;
-using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Mono.Options;
@@ -178,13 +175,13 @@ namespace SslLabsMassScan
                     }
                     catch (WebException ex)
                     {
-                        Console.WriteLine("Webexception starting scan, waiting 3s: " + ex.Message);
+                        Console.WriteLine("(Domain: " + domain + ") Webexception starting scan, waiting 3s: " + ex.Message);
                         limitChangedEvent.WaitOne(3000);
                         continue;
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine("Exception while starting scan, waiting 30s: " + ex.Message);
+                        Console.WriteLine("(Domain: " + domain + ") Exception while starting scan, waiting 30s: " + ex.Message);
                         Thread.Sleep(30000);
                         continue;
                     }
@@ -227,12 +224,12 @@ namespace SslLabsMassScan
                         }
                         catch (WebException ex)
                         {
-                            Console.WriteLine("Webexception waiting for scan, waiting 3s: " + ex.Message);
+                            Console.WriteLine("(Domain: " + domain + ") Webexception waiting for scan, waiting 3s: " + ex.Message);
                             Thread.Sleep(3000);
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine("Exception while waiting for scan, waiting 30s: " + ex.Message);
+                            Console.WriteLine("(Domain: " + domain + ") Exception while waiting for scan, waiting 30s: " + ex.Message);
                             Thread.Sleep(30000);
                         }
                     }
