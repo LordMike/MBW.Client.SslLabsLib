@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\MillisecondTimespanConverter.cs" />
     <Compile Include="Enums\CertificateIssues.cs" />
     <Compile Include="Enums\ChainCertificateIssues.cs" />
     <Compile Include="Enums\CompressionMethodsSupported.cs" />

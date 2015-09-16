@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
+using SslLabsLib.Code;
 
 namespace SslLabsLib.Objects
 {
@@ -39,8 +41,9 @@ namespace SslLabsLib.Objects
         /// The cool-off period after each new assessment; you're not allowed to submit a new assessment before the cool-off expires, otherwise you'll get a 429.
         /// </summary>
         [JsonProperty("newAssessmentCoolOff")]
-        public int NewAssessmentCoolOff { get; set; }
-		
+        [JsonConverter(typeof(MillisecondTimespanConverter))]
+        public TimeSpan NewAssessmentCoolOff { get; set; }
+
         public Info()
         {
             Messages = new List<string>();
