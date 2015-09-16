@@ -34,5 +34,11 @@ namespace SslLabsLib.Objects
         /// </summary>
         [JsonProperty("messages")]
         public List<string> Messages { get; set; }
+
+        /// <summary>
+        /// The cool-off period after each new assessment; you're not allowed to submit a new assessment before the cool-off expires, otherwise you'll get a 429.
+        /// </summary>
+        [JsonProperty("newAssessmentCoolOff")]
+        public int NewAssessmentCoolOff { get; set; }
     }
 }

@@ -105,17 +105,23 @@ namespace SslLabsLib
             return JsonConvert.DeserializeObject<Endpoint>(json);
         }
 
-        public bool TryStartAnalysis(string hostname, int? maxAge = null, AnalyzeOptions options = AnalyzeOptions.None)
+        public TryStartResult TryStartAnalysis(string hostname, int? maxAge = null, AnalyzeOptions options = AnalyzeOptions.None)
         {
             Analysis analysis;
             return TryStartAnalysis(hostname, maxAge, out analysis, options);
         }
 
-        public bool TryStartAnalysis(string hostname, int? maxAge, out Analysis analysis, AnalyzeOptions options = AnalyzeOptions.None)
+        public TryStartResult TryStartAnalysis(string hostname, int? maxAge, out Analysis analysis, AnalyzeOptions options = AnalyzeOptions.None)
         {
             AnalysisResult result = GetAnalysisInternal(hostname, maxAge, options, out analysis);
 
-            return result == AnalysisResult.Success;
+            if (result == AnalysisResult.Success)
+                return TryStartResult.Ok;
+
+            if (result == AnalysisResult.RateLimit)
+                return TryStartResult.RateLimit;
+
+            return TryStartResult.NotStarted;
         }
 
         public Analysis GetAnalysisBlocking(string hostname, int? maxAge = null, AnalyzeOptions options = AnalyzeOptions.None, Action<Analysis> progressCallback = null)

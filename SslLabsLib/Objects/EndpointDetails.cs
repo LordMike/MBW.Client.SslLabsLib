@@ -243,5 +243,29 @@ namespace SslLabsLib.Objects
         /// </summary>
         [JsonProperty("hasSct")]
         public SctResult HasSct { get; set; }
+
+        /// <summary>
+        /// List of hex-encoded DH primes used by the server
+        /// </summary>
+        [JsonProperty("dhPrimes")]
+        public string[] DhPrimes { get; set; }
+
+        /// <summary>
+        /// Whether the server uses known DH primes:
+        /// </summary>
+        [JsonProperty("dhUsesKnownPrimes")]
+        public DhKnownPrimesResult DhUsesKnownPrimes { get; set; }
+
+        /// <summary>
+        /// True if the DH ephemeral server value is reused.
+        /// </summary>
+        [JsonProperty("dhYsReuse")]
+        public bool DhYsReuse { get; set; }
+
+        /// <summary>
+        /// True if the server uses DH parameters weaker than 1024 bits.
+        /// </summary>
+        [JsonProperty("logjam")]
+        public bool LogJam { get; set; }
     }
 }
