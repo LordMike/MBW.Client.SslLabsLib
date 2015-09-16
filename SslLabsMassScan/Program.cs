@@ -85,7 +85,7 @@ namespace SslLabsMassScan
                 return 2;
             }
 
-            Console.WriteLine("Beginning work on " + domains.Count + " domains");
+            Console.WriteLine("Beginning work on {0:N0} domains", domains.Count);
 
             Uri endpoint = new Uri("https://api.ssllabs.com/api/v2/");
             if (options.Endpoint == "dev")
@@ -96,6 +96,8 @@ namespace SslLabsMassScan
 
             client.WaitTimePreScan = TimeSpan.FromSeconds(20);
             client.WaitTimeScan = TimeSpan.FromSeconds(10);
+
+            Info sslLabsInfo = client.GetInfo();
 
             int? maxAge = options.MaxAge;
 
@@ -122,10 +124,7 @@ namespace SslLabsMassScan
 
                     lastStatus = DateTime.UtcNow;
 
-                    Console.WriteLine("Queue: " + domains.Count +
-                                      ", running: " + client.CurrentAssesments +
-                                      " (of " + client.MaxAssesments + "), " +
-                                      "completed: " + completedTasks);
+                    Console.WriteLine("Queue: {0:N0}, running: {1:N0} (cur.limit: {2:N0}), completed: {3:N0}", domains.Count, client.CurrentAssesments, client.MaxAssesments, completedTasks);
                 }
             };
 
@@ -172,7 +171,7 @@ namespace SslLabsMassScan
                 // Attempt to start the task
                 while (true)
                 {
-                    bool didStart;
+                    TryStartResult didStart;
                     try
                     {
                         didStart = client.TryStartAnalysis(domain, maxAge, out analysis, startOptions);
@@ -190,7 +189,13 @@ namespace SslLabsMassScan
                         continue;
                     }
 
-                    if (didStart)
+                    if (didStart == TryStartResult.RateLimit)
+                    {
+                        Thread.Sleep(sslLabsInfo.NewAssessmentCoolOff);
+                        continue;
+                    }
+
+                    if (didStart == TryStartResult.Ok)
                     {
                         printStatus();
                         break;
