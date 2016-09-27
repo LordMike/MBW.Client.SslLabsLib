@@ -4,15 +4,15 @@ using SslLabsLib.Objects;
 namespace SslLabsLib.Tests
 {
     [TestClass]
-    public class InfoTests
+    public class StatusCodeTests
     {
         [TestMethod]
-        public void InfoTest()
+        public void StatusCodeTest()
         {
             SslLabsClient client = new SslLabsClient();
 
-            Info info = client.GetInfo();
-            Assert.IsNotNull(info);
+            StatusCodes codes = client.GetStatusCodes();
+            Assert.IsNotNull(codes);
         }
     }
 }
