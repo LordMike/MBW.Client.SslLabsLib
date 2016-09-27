@@ -67,13 +67,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\KeyValuePairListConverter.cs" />
     <Compile Include="Code\MillisecondTimespanConverter.cs" />
+    <Compile Include="Enums\AnalysisStatus.cs" />
     <Compile Include="Enums\CertificateIssues.cs" />
     <Compile Include="Enums\ChainCertificateIssues.cs" />
     <Compile Include="Enums\CompressionMethodsSupported.cs" />
+    <Compile Include="Enums\DrownHostStatus.cs" />
     <Compile Include="Enums\ForwardSecrecyResult.cs" />
+    <Compile Include="Enums\HpkpStatus.cs" />
+    <Compile Include="Enums\HstsPreloadStatus.cs" />
+    <Compile Include="Enums\HstsStatus.cs" />
+    <Compile Include="Enums\MiscIntoleranceType.cs" />
+    <Compile Include="Enums\MustStapleStatus.cs" />
     <Compile Include="Enums\OpenSslCcsResult.cs" />
+    <Compile Include="Enums\OpenSSLLuckyMinus20Result.cs" />
     <Compile Include="Enums\PoodleResult.cs" />
+    <Compile Include="Enums\ProtocolIntoleranceType.cs" />
     <Compile Include="Enums\RenegotiationSupport.cs" />
     <Compile Include="Enums\RevocationInfo.cs" />
     <Compile Include="Enums\RevocationStatus.cs" />
@@ -92,6 +102,11 @@
     <Compile Include="Objects\Ciphersuite.cs" />
     <Compile Include="Objects\Client.cs" />
     <Compile Include="Enums\DhKnownPrimesResult.cs" />
+    <Compile Include="Objects\DrownHost.cs" />
+    <Compile Include="Objects\HpkpPin.cs" />
+    <Compile Include="Objects\HpkpPolicy.cs" />
+    <Compile Include="Objects\HstsPolicy.cs" />
+    <Compile Include="Objects\HstsPreload.cs" />
     <Compile Include="Objects\Protocol.cs" />
     <Compile Include="Objects\Simulation.cs" />
     <Compile Include="Objects\SimulationDetails.cs" />

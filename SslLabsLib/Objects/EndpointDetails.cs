@@ -83,24 +83,28 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// The contents of the Strict-Transport-Security (STS) response header, if seen
         /// </summary>
+        [Obsolete("Deprecated")]
         [JsonProperty("stsResponseHeader")]
         public string StrictTransportSecurityResponseHeader { get; set; }
 
         /// <summary>
         /// The maxAge parameter extracted from the STS parameters; null if STS not seen, or -1 if the specified value is invalid (e.g., not a zero or a positive integer; the maximum value currently supported is 2,147,483,647)
         /// </summary>
+        [Obsolete("Deprecated")]
         [JsonProperty("stsMaxAge")]
         public int StrictTransportSecurityMaxAge { get; set; }
 
         /// <summary>
         /// True if the includeSubDomains STS parameter is set; null if STS not seen
         /// </summary>
+        [Obsolete("Deprecated")]
         [JsonProperty("stsSubdomains")]
         public bool StrictTransportSecuritySubdomains { get; set; }
 
         /// <summary>
         /// The contents of the Public-Key-Pinning response header, if seen
         /// </summary>
+        [Obsolete("Deprecated")]
         [JsonProperty("pkpResponseHeader")]
         public string PublicKeyPinningResponseHeader { get; set; }
 
@@ -178,16 +182,34 @@ namespace SslLabsLib.Objects
         public bool SupportsRc4 { get; set; }
 
         /// <summary>
+        /// True if RC4 is used with modern clients.
+        /// </summary>
+        [JsonProperty("rc4WithModern")]
+        public bool Rc4WithModern { get; set; }
+
+        /// <summary>
+        /// True if only RC4 suites are supported.
+        /// </summary>
+        [JsonProperty("rc4Only")]
+        public bool Rc4Only { get; set; }
+
+        /// <summary>
         /// Indicates support for Forward Secrecy
         /// </summary>
         [JsonProperty("forwardSecrecy")]
         public ForwardSecrecyResult ForwardSecrecy { get; set; }
 
         /// <summary>
-        /// True if RC4 is used with modern clients.
+        /// Indicates protocol version intolerance issues:
         /// </summary>
-        [JsonProperty("rc4WithModern")]
-        public bool Rc4WithModern { get; set; }
+        [JsonProperty("protocolIntolerance")]
+        public ProtocolIntoleranceType ProtocolIntolerance { get; set; }
+
+        /// <summary>
+        /// Indicates various other types of intolerance:
+        /// </summary>
+        [JsonProperty("miscIntolerance")]
+        public MiscIntoleranceType MiscIntolerance { get; set; }
 
         /// <summary>
         /// Client simulation details
@@ -212,6 +234,12 @@ namespace SslLabsLib.Objects
         /// </summary>
         [JsonProperty("openSslCcs")]
         public OpenSslCcsResult OpenSslCcs { get; set; }
+
+        /// <summary>
+        /// Results of the CVE-2016-2107 test:
+        /// </summary>
+        [JsonProperty("openSSLLuckyMinus20")]
+        public OpenSSLLuckyMinus20Result OpenSSLLuckyMinus20 { get; set; }
 
         /// <summary>
         /// True if the endpoint is vulnerable to POODLE; false otherwise
@@ -267,7 +295,55 @@ namespace SslLabsLib.Objects
         /// </summary>
         [JsonProperty("logjam")]
         public bool LogJam { get; set; }
-		
+
+        /// <summary>
+        /// True if the server takes into account client preferences when deciding if to use ChaCha20 suites.
+        /// </summary>
+        [JsonProperty("chaCha20Preference")]
+        public bool ChaCha20Preference { get; set; }
+
+        /// <summary>
+        /// Server's HSTS policy. Experimental.
+        /// </summary>
+        [JsonProperty("hstsPolicy")]
+        public HstsPolicy HstsPolicy { get; set; }
+
+        /// <summary>
+        /// Information about preloaded HSTS policies.
+        /// </summary>
+        [JsonProperty("hstsPreloads")]
+        public List<HstsPreload> HstsPreloads { get; set; }
+
+        /// <summary>
+        /// Server's HPKP policy. Experimental.
+        /// </summary>
+        [JsonProperty("hpkpPolicy")]
+        public HpkpPolicy HpkpPolicy { get; set; }
+
+        /// <summary>
+        /// Server's HPKP RO (Report Only) policy. Experimental.
+        /// </summary>
+        [JsonProperty("hpkpRoPolicy")]
+        public HpkpPolicy HpkpRoPolicy { get; set; }
+
+        /// <summary>
+        /// List of drown hosts. Experimental.
+        /// </summary>
+        [JsonProperty("drownHosts")]
+        public List<DrownHost> DrownHosts { get; set; }
+
+        /// <summary>
+        /// True if error occurred in drown test.
+        /// </summary>
+        [JsonProperty("drownErrors")]
+        public bool DrownErrors { get; set; }
+
+        /// <summary>
+        /// True if server vulnerable to drown attack.
+        /// </summary>
+        [JsonProperty("drownVulnerable")]
+        public bool DrownVulnerable { get; set; }
+
         public EndpointDetails()
         {
             Key = new Key();
@@ -276,6 +352,8 @@ namespace SslLabsLib.Objects
             Protocols = new List<Protocol>();
             Suites = new Suites();
             Simulations = new SimulationDetails();
+            HstsPreloads = new List<HstsPreload>();
+            DrownHosts = new List<DrownHost>();
         }
     }
 }

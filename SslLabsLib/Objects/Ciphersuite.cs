@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 
 namespace SslLabsLib.Objects
 {
+    // TODO: Rename to Suite
     public class Ciphersuite
     {
         /// <summary>
@@ -21,18 +22,6 @@ namespace SslLabsLib.Objects
         /// </summary>
         [JsonProperty("cipherStrength")]
         public int CipherStrength { get; set; }
-
-        /// <summary>
-        /// ECDH bits
-        /// </summary>
-        [JsonProperty("ecdhBits")]
-        public int EcdhBits { get; set; }
-
-        /// <summary>
-        /// ECDH RSA-equivalent strength
-        /// </summary>
-        [JsonProperty("ecdhStrength")]
-        public int EcdhStrength { get; set; }
 
         /// <summary>
         /// Strength of DH params (e.g., 1024)
@@ -57,6 +46,18 @@ namespace SslLabsLib.Objects
         /// </summary>
         [JsonProperty("dhYs", NullValueHandling = NullValueHandling.Ignore)]
         public string DhYs { get; set; }
+
+        /// <summary>
+        /// ECDH bits
+        /// </summary>
+        [JsonProperty("ecdhBits")]
+        public int EcdhBits { get; set; }
+
+        /// <summary>
+        /// ECDH RSA-equivalent strength
+        /// </summary>
+        [JsonProperty("ecdhStrength")]
+        public int EcdhStrength { get; set; }
 
         /// <summary>
         /// 0 if the suite is insecure, null otherwise

@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 
 namespace SslLabsLib.Objects
 {
+    // TODO: Rename SimDetails
     public class SimulationDetails
     {
         /// <summary>

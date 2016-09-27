@@ -5,6 +5,7 @@ namespace SslLabsLib.Objects
 {
     public class Endpoint
     {
+        // TODO: Represent this as an IpAddress
         /// <summary>
         /// Endpoint IP address, in IPv4 or IPv6 format.
         /// </summary>
@@ -88,10 +89,5 @@ namespace SslLabsLib.Objects
         /// </summary>
         [JsonProperty("details")]
         public EndpointDetails Details { get; set; }
-
-        public Endpoint()
-        {
-            Details = new EndpointDetails();
-        }
     }
 }

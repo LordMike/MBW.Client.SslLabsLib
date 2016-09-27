@@ -32,17 +32,17 @@ namespace SslLabsLib.Objects
         public int CurrentAssessments { get; set; }
 
         /// <summary>
-        /// A list of messages (strings). Messages can be public (sent to everyone) and private (sent only to the invoking client). Private messages are prefixed with "[Private]".
-        /// </summary>
-        [JsonProperty("messages")]
-        public List<string> Messages { get; set; }
-
-        /// <summary>
         /// The cool-off period after each new assessment; you're not allowed to submit a new assessment before the cool-off expires, otherwise you'll get a 429.
         /// </summary>
         [JsonProperty("newAssessmentCoolOff")]
         [JsonConverter(typeof(MillisecondTimespanConverter))]
         public TimeSpan NewAssessmentCoolOff { get; set; }
+
+        /// <summary>
+        /// A list of messages (strings). Messages can be public (sent to everyone) and private (sent only to the invoking client). Private messages are prefixed with "[Private]".
+        /// </summary>
+        [JsonProperty("messages")]
+        public List<string> Messages { get; set; }
 
         public Info()
         {

@@ -47,16 +47,16 @@ namespace SslLabsLib.Objects
         public string IssuerSubject { get; set; }
 
         /// <summary>
-        /// Issuer name
-        /// </summary>
-        [JsonProperty("issuerLabel")]
-        public string IssuerLabel { get; set; }
-
-        /// <summary>
         /// Certificate signature algorithm
         /// </summary>
         [JsonProperty("sigAlg")]
         public string SigAlg { get; set; }
+
+        /// <summary>
+        /// Issuer name
+        /// </summary>
+        [JsonProperty("issuerLabel")]
+        public string IssuerLabel { get; set; }
 
         /// <summary>
         /// A number that represents revocation information present in the certificate:
@@ -117,6 +117,12 @@ namespace SslLabsLib.Objects
         /// </summary> 
         [JsonProperty("sct")]
         public bool ContainsSignedCertificateTimestamp { get; set; }
+
+        /// <summary>
+        /// Describes the must staple feature extension status:
+        /// </summary>
+        [JsonProperty("mustStaple")]
+        public MustStapleStatus MustStapleStatus { get; set; }
 
         public Cert()
         {

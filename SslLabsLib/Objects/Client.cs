@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 
 namespace SslLabsLib.Objects
 {
+    // TODO: Rename to SimClient
     public class Client
     {
         /// <summary>
@@ -17,6 +18,12 @@ namespace SslLabsLib.Objects
         public string Name { get; set; }
 
         /// <summary>
+        /// Platform
+        /// </summary>
+        [JsonProperty("platform", NullValueHandling = NullValueHandling.Ignore)]
+        public string Platform { get; set; }
+
+        /// <summary>
         /// Version
         /// </summary>
         [JsonProperty("version")]
@@ -30,11 +37,5 @@ namespace SslLabsLib.Objects
         /// </summary>
         [JsonProperty("isReference")]
         public bool IsReference { get; set; }
-
-        /// <summary>
-        /// Platform
-        /// </summary>
-        [JsonProperty("platform", NullValueHandling = NullValueHandling.Ignore)]
-        public string Platform { get; set; }
     }
 }

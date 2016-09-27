@@ -7,6 +7,7 @@ using SslLabsLib.Enums;
 
 namespace SslLabsLib.Objects
 {
+    // TODO: Rename to Host
     public class Analysis
     {
         /// <summary>
