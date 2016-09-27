@@ -41,13 +41,13 @@ namespace SslLabsLib.Objects
         /// True if the includeSubDomains directive is set; null otherwise
         /// </summary>
         [JsonProperty("includeSubDomains")]
-        public string IncludeSubDomains { get; set; }
+        public bool IncludeSubDomains { get; set; }
 
         /// <summary>
         /// True if the preload directive is set; null otherwise
         /// </summary>
         [JsonProperty("preload", NullValueHandling = NullValueHandling.Ignore)]
-        public string Preload { get; set; }
+        public bool Preload { get; set; }
 
         /// <summary>
         /// List of raw policy directives

@@ -10,7 +10,7 @@ namespace SslLabsLib.Objects
         /// <summary>
         /// SSL Labs software version as a string (e.g., "1.11.14")
         /// </summary>
-        [JsonProperty("version")]
+        [JsonProperty("engineVersion")]
         public string EngineVersion { get; set; }
 
         /// <summary>

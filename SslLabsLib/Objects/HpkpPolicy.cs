@@ -35,7 +35,7 @@ namespace SslLabsLib.Objects
         /// True if the includeSubDomains directive is set; null otherwise
         /// </summary>
         [JsonProperty("includeSubDomains")]
-        public string IncludeSubDomains { get; set; }
+        public bool IncludeSubDomains { get; set; }
 
         /// <summary>
         /// The report-uri value from the policy

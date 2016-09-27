@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SslLabsLib.Objects;
+using SslLabsLib.Tests.Helpers;
 
 namespace SslLabsLib.Tests
 {
@@ -13,6 +14,8 @@ namespace SslLabsLib.Tests
 
             Info info = client.GetInfo();
             Assert.IsNotNull(info);
+
+            TestHelpers.EnsureAllPropertiesSet(info);
         }
     }
 }
