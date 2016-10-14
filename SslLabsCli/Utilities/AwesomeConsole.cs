@@ -5,11 +5,11 @@ namespace SslLabsCli.Utilities
 {
     public static class AwesomeConsole
     {
-        private static object _lockObj = new object();
+        private static readonly object LockObj = new object();
 
         public static void WriteLine()
         {
-            lock (_lockObj)
+            lock (LockObj)
             {
                 Console.WriteLine();
             }
@@ -38,7 +38,7 @@ namespace SslLabsCli.Utilities
 
         public static void WriteLine(string format, ConsoleColor color, params object[] arguments)
         {
-            lock (_lockObj)
+            lock (LockObj)
             {
                 if (color != ConsoleColor.Gray)
                     Console.ForegroundColor = color;
@@ -76,7 +76,7 @@ namespace SslLabsCli.Utilities
 
         public static void Write(string format, ConsoleColor color, params object[] arguments)
         {
-            lock (_lockObj)
+            lock (LockObj)
             {
                 if (color != ConsoleColor.Gray)
                     Console.ForegroundColor = color;
@@ -99,12 +99,12 @@ namespace SslLabsCli.Utilities
         public class ConsoleWriter : IDisposable
         {
             private bool _hasExited;
-            private object _writerLockObj = new object();
+            private readonly object _writerLockObj = new object();
 
             internal ConsoleWriter()
             {
                 lock (_writerLockObj)
-                    Monitor.Enter(_lockObj);
+                    Monitor.Enter(LockObj);
             }
 
             public void Close()
@@ -114,7 +114,7 @@ namespace SslLabsCli.Utilities
                     if (_hasExited)
                         return;
 
-                    Monitor.Exit(_lockObj);
+                    Monitor.Exit(LockObj);
                     _hasExited = true;
                 }
             }

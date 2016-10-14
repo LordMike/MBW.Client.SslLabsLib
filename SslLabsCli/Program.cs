@@ -13,7 +13,7 @@ namespace SslLabsCli
 {
     class Program
     {
-        private static SslLabsClient _client = new SslLabsClient();
+        private static readonly SslLabsClient Client = new SslLabsClient();
 
         static int Main(string[] args)
         {
@@ -51,7 +51,7 @@ namespace SslLabsCli
                 AwesomeConsole.WriteLine(analysis.StatusMessage, ConsoleColor.Cyan);
 
                 AwesomeConsole.WriteLine("Messages from SSLLabs");
-                Info info = _client.GetInfo();
+                Info info = Client.GetInfo();
 
                 foreach (string msg in info.Messages)
                     AwesomeConsole.WriteLine("  " + msg, ConsoleColor.Yellow);
@@ -125,7 +125,7 @@ namespace SslLabsCli
             else
                 analyzeOptions |= AnalyzeOptions.FromCache;
 
-            Analysis analysis = _client.GetAnalysisBlocking(options.Hostname, null, analyzeOptions, progress);
+            Analysis analysis = Client.GetAnalysisBlocking(options.Hostname, null, analyzeOptions, progress);
 
             return analysis;
         }

@@ -28,7 +28,7 @@ namespace SslLabsLib
         /// </summary>
         public TimeSpan WaitTimeOverloaded { get; set; }
 
-        private HttpClient _restClient;
+        private readonly HttpClient _restClient;
 
         public int MaxAssesments { get; private set; }
 
@@ -153,8 +153,7 @@ namespace SslLabsLib
             if (analysis != null && analysis.Status == AnalysisStatus.READY)
                 return analysis;
 
-            if (progressCallback != null)
-                progressCallback(analysis);
+            progressCallback?.Invoke(analysis);
 
             // Deactivate StartNew
             options &= ~AnalyzeOptions.StartNew;
@@ -199,8 +198,7 @@ namespace SslLabsLib
                     // Unknown?
                     throw new InvalidOperationException("Unknown state...");
 
-                if (progressCallback != null)
-                    progressCallback(analysis);
+                progressCallback?.Invoke(analysis);
             }
 
             return analysis;
@@ -239,15 +237,17 @@ namespace SslLabsLib
                 {
                     bool changed = tmp != MaxAssesments;
                     MaxAssesments = tmp;
+
                     if (changed)
-                        OnMaxAssesmentsChanged();
+                        MaxAssesmentsChanged?.Invoke();
                 }
                 else if (header.Key == "X-Current-Assessments" && int.TryParse(header.Value.FirstOrDefault(), out tmp))
                 {
                     bool changed = tmp != MaxAssesments;
                     CurrentAssesments = tmp;
+
                     if (changed)
-                        OnCurrentAssesmentsChanged();
+                        CurrentAssesmentsChanged?.Invoke();
                 }
             }
         }
@@ -313,20 +313,6 @@ namespace SslLabsLib
             analysis = JsonConvert.DeserializeObject<Analysis>(json);
 
             return AnalysisResult.Success;
-        }
-
-        protected virtual void OnCurrentAssesmentsChanged()
-        {
-            Action handler = CurrentAssesmentsChanged;
-            if (handler != null)
-                handler();
-        }
-
-        protected virtual void OnMaxAssesmentsChanged()
-        {
-            Action handler = MaxAssesmentsChanged;
-            if (handler != null)
-                handler();
         }
 
         enum AnalysisResult
