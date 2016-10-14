@@ -134,6 +134,9 @@ namespace SslLabsLib
             Analysis analysis;
             AnalysisResult result = GetAnalysisInternal(hostname, maxAge, options, out analysis);
 
+            // Loop till we're done
+            TimeSpan toWait = WaitTimePreScan;
+
             switch (result)
             {
                 case AnalysisResult.Error:
@@ -141,9 +144,13 @@ namespace SslLabsLib
                     throw new Exception("The server was unable to handle the request (" + result + ")");
                 case AnalysisResult.Maintenance:
                     throw new Exception("The server was unable to handle the request due to Maintenance (HTTP 503)");
+                case AnalysisResult.Overloaded:
+                case AnalysisResult.RateLimit:
+                    toWait = WaitTimeOverloaded;
+                    break;
             }
 
-            if (analysis.Status == AnalysisStatus.READY)
+            if (analysis != null && analysis.Status == AnalysisStatus.READY)
                 return analysis;
 
             if (progressCallback != null)
@@ -151,9 +158,6 @@ namespace SslLabsLib
 
             // Deactivate StartNew
             options &= ~AnalyzeOptions.StartNew;
-
-            // Loop till we're done
-            TimeSpan toWait = WaitTimePreScan;
 
             while (true)
             {
