@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.9
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D7E75F7A-74B7-44F0-A8D6-554F7F12E684}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MBW.Client.SslLabsLib", "src\MBW.Client.SslLabsLib\MBW.Client.SslLabsLib.csproj", "{47DD0A66-92B8-49DD-AF73-8F49B38057A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MBW.Client.SslLabsLib.TestApplication", "src\MBW.Client.SslLabsLib.TestApplication\MBW.Client.SslLabsLib.TestApplication.csproj", "{956209E5-A8F4-41A1-8287-BA8BAADF491C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MBW.Client.SslLabsLib.Tests", "src\MBW.Client.SslLabsLib.Tests\MBW.Client.SslLabsLib.Tests.csproj", "{7AA1EC07-16A1-4284-9CC4-E503A65C19DE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{47DD0A66-92B8-49DD-AF73-8F49B38057A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47DD0A66-92B8-49DD-AF73-8F49B38057A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47DD0A66-92B8-49DD-AF73-8F49B38057A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47DD0A66-92B8-49DD-AF73-8F49B38057A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{956209E5-A8F4-41A1-8287-BA8BAADF491C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{956209E5-A8F4-41A1-8287-BA8BAADF491C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{956209E5-A8F4-41A1-8287-BA8BAADF491C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{956209E5-A8F4-41A1-8287-BA8BAADF491C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AA1EC07-16A1-4284-9CC4-E503A65C19DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AA1EC07-16A1-4284-9CC4-E503A65C19DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AA1EC07-16A1-4284-9CC4-E503A65C19DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AA1EC07-16A1-4284-9CC4-E503A65C19DE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{47DD0A66-92B8-49DD-AF73-8F49B38057A6} = {D7E75F7A-74B7-44F0-A8D6-554F7F12E684}
+		{956209E5-A8F4-41A1-8287-BA8BAADF491C} = {D7E75F7A-74B7-44F0-A8D6-554F7F12E684}
+		{7AA1EC07-16A1-4284-9CC4-E503A65C19DE} = {D7E75F7A-74B7-44F0-A8D6-554F7F12E684}
+	EndGlobalSection
+EndGlobal

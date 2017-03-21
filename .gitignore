@@ -1,12 +1,13 @@
-# Folders
+.vs/
+.idea/
 bin/
 obj/
-.vs/
-Nuget/
+Build/
 
-# Files
-*.lock.json
+# Files for local dev
 *.user
+*.local.json
 
-# Tests
-TestResult.xml
+# Verify
+# https://github.com/VerifyTests/Verify#received-and-verified
+*.received.*
