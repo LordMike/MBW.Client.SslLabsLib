@@ -1,13 +1,13 @@
 # SSL Labs API client for .NET
 This is an SSL Labs API client wrapper for [SSLLabs asssesment tool](https://www.ssllabs.com/), based on the official [SSL Labs API Documentation](https://github.com/ssllabs/ssllabs-scan/blob/master/ssllabs-api-docs-v3.md)
 
-[![Generic Build](https://github.com/LordMike/MBW.Client.SslLabsLib/actions/workflows/dotnet.yml/badge.svg)](https://github.com/LordMike/MBW.Client.SslLabsLib/actions/workflows/dotnet.yml) [![Nuget](https://img.shields.io/nuget/v/SslLabsLib)](https://nuget.org/packages/SslLabsLib)
+[![Generic Build](https://github.com/LordMike/MBW.Client.SslLabsLib/actions/workflows/dotnet.yml/badge.svg)](https://github.com/LordMike/MBW.Client.SslLabsLib/actions/workflows/dotnet.yml) [![Nuget](https://img.shields.io/nuget/v/MBW.Client.SslLabsLib)](https://nuget.org/packages/MBW.Client.SslLabsLib)
 
 
 # Installation
-The easiest way to get the library is to use Nuget. The library has been published [here](https://www.nuget.org/packages/SslLabsLib/), and is also available [at Github](https://github.com/LordMike/MBW.Client.SslLabsLib) in source form. The following Nuget command will fetch the package for you.
+The easiest way to get the library is to use Nuget. The library has been published [here](https://www.nuget.org/packages/MBW.Client.SslLabsLib/), and is also available [at Github](https://github.com/LordMike/MBW.Client.SslLabsLib) in source form. The following Nuget command will fetch the package for you.
 
-    Install-Package SslLabsLib
+    Install-Package MBW.Client.SslLabsLib
 
 # Example usage
 The SSL Labs API is built up around a polling method, where you regularly poll the API for the status on an ongoing assesment. An example client that fetches a result for Google.com is below:
