@@ -12,7 +12,7 @@ public class HttpTransaction
     /// <summary>
     /// Response status code
     /// </summary>
-    public int StatusCode { get; set; }
+    public int? StatusCode { get; set; }
 
     /// <summary>
     /// The entire request line as a single field
